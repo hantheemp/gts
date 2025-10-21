@@ -34,3 +34,8 @@
   --depth: 0;
   --noise: 0;
 }
+@layer base {
+  html, body {
+    font-family: "Space Grotesk", sans-serif;
+  }
+}
