@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.muratkagan.gts.business.SongService;
-import com.muratkagan.gts.entites.Song;
+import com.muratkagan.gts.entities.Song;
 
 @RestController
 public class SongController {

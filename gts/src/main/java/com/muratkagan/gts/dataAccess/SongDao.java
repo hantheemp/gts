@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.muratkagan.gts.entites.Song;
+import com.muratkagan.gts.entities.Song;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

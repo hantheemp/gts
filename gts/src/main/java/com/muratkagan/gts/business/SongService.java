@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.muratkagan.gts.dataAccess.SongDao;
-import com.muratkagan.gts.entites.Song;
+import com.muratkagan.gts.entities.Song;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
