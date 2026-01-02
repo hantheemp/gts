@@ -27,20 +27,17 @@ public class SongService implements ISongService{
 
 	@Override
 	public Optional<Song> getById(int id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return songDao.getById(id);
 	}
 
 	@Override
-	public boolean update(Song song, int id) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean update(Song song) {
+		return songDao.update(song);
 	}
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		return songDao.delete(id);
 	}
 
 }

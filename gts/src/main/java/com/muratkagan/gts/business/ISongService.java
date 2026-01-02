@@ -11,7 +11,7 @@ public interface ISongService {
 
     Optional<Song> getById(int id);
 
-    boolean update(Song song, int id);
+    boolean update(Song song);
 
     boolean delete(int id);
 	
