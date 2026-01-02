@@ -46,7 +46,7 @@ CREATE TABLE songs (
   	release_date DATE,
   	release_year INT GENERATED ALWAYS AS (EXTRACT(YEAR FROM release_date)::INT) STORED,
   	duration_seconds INT,
-  	language VARCHAR(100) REFERENCES languages(name),
+  	language_code VARCHAR(100) REFERENCES languages(code),
   	created_at TIMESTAMPTZ DEFAULT now(),
   	updated_at TIMESTAMPTZ DEFAULT now()
 ); -- Other fundamentals of Song entity will take place in different tables for better architecture.

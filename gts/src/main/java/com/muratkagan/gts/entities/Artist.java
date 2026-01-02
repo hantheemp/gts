@@ -8,33 +8,34 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "artists")
 public class Artist {
-	
-	@Id
-	@Column(name = "id")
-	private int id;
-	
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "surname")
-	private String surname;
-	
-	@Column(name = "country_id")
-	private int countryId;
-	
-	@Column(name = "bio", columnDefinition = "text")
-	private String bio;
-	
-	@Column(name = "socialLinks", columnDefinition = "jsonb")
-	private String socialLinks;
-	
-	@Column(name = "created_at", insertable = false, updatable = false)
-	private OffsetDateTime createdAt;
 
-	@Column(name = "updated_at", insertable = false, updatable = false)
-	private OffsetDateTime updatedAt;
-	
-	// Getters and setters
+    @Id
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "country_id")
+    private int countryId;
+
+    @Column(name = "bio", columnDefinition = "text")
+    private String bio;
+
+    @Column(name = "social_links", columnDefinition = "jsonb")
+    @Convert(converter = com.muratkagan.gts.lib.JSONBConverter.class)
+    private Map<String, String> socialLinks;
+
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private OffsetDateTime updatedAt;
+    
+    // Getters and setters
 
 	public int getId() {
 		return id;
@@ -76,11 +77,11 @@ public class Artist {
 		this.bio = bio;
 	}
 
-	public String getSocialLinks() {
+	public Map<String, String> getSocialLinks() {
 		return socialLinks;
 	}
 
-	public void setSocialLinks(String socialLinks) {
+	public void setSocialLinks(Map<String, String> socialLinks) {
 		this.socialLinks = socialLinks;
 	}
 
@@ -99,5 +100,5 @@ public class Artist {
 	public void setUpdatedAt(OffsetDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
+    
 }
