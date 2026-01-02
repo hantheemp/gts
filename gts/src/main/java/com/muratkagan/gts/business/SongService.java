@@ -3,6 +3,7 @@ package com.muratkagan.gts.business;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.muratkagan.gts.dataAccess.SongDao;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Service
 public class SongService implements ISongService{
 	
+	@Autowired
 	public SongService(SongDao songDao) {
 		this.songDao = songDao;
 	}
@@ -27,7 +29,7 @@ public class SongService implements ISongService{
 
 	@Override
 	public Optional<Song> getById(int id) {
-		return songDao.getById(id);
+		return songDao.getById(id); 
 	}
 
 	@Override

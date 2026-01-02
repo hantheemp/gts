@@ -11,7 +11,9 @@ public interface IArtistDao {
 	
 	Optional<Artist> getById(int id);
 	
-	boolean update(Artist artist, int id);
+	boolean insert(Artist artist);
+	
+	boolean update(Artist artist);
 	
 	boolean delete(int id);
 

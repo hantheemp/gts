@@ -1,9 +1,14 @@
 package com.muratkagan.gts.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
-import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "artists")
@@ -21,13 +26,16 @@ public class Artist {
 
     @Column(name = "country_id")
     private int countryId;
+    
+    @Column(name = "city_id")
+    private int cityId;
 
     @Column(name = "bio", columnDefinition = "text")
     private String bio;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "social_links", columnDefinition = "jsonb")
-    @Convert(converter = com.muratkagan.gts.lib.JSONBConverter.class)
-    private Map<String, String> socialLinks;
+    private Map<String, Object> socialLinks;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
@@ -68,6 +76,14 @@ public class Artist {
 	public void setCountryId(int countryId) {
 		this.countryId = countryId;
 	}
+	
+	public int getCityId() {
+		return cityId;
+	}
+	
+	public void setCityId(int cityId) {
+		this.cityId = cityId;
+	}
 
 	public String getBio() {
 		return bio;
@@ -77,11 +93,11 @@ public class Artist {
 		this.bio = bio;
 	}
 
-	public Map<String, String> getSocialLinks() {
+	public Map<String, Object> getSocialLinks() {
 		return socialLinks;
 	}
 
-	public void setSocialLinks(Map<String, String> socialLinks) {
+	public void setSocialLinks(Map<String, Object> socialLinks) {
 		this.socialLinks = socialLinks;
 	}
 
