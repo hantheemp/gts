@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 import com.muratkagan.gts.dao.SongDao;
 import com.muratkagan.gts.entities.Song;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
 @Service
 public class SongService implements ISongService {
 

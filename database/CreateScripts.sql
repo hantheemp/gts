@@ -66,20 +66,20 @@ CREATE TABLE albums (
 CREATE INDEX albums_id_idx ON albums(id);
 CREATE INDEX albums_title ON albums(title);
 
--- Genres -> WORKING!!!
+-- Genres -> Implemented in Spring Boot.
 CREATE TABLE genres (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) UNIQUE NOT NULL
 );
 
--- Song-Genre Relationship -> WORKING!!!
+-- Song-Genre Relationship -> Implemented in Spring Boot.
 CREATE TABLE song_genres (
   song_id INT REFERENCES songs(id) ON DELETE CASCADE,
   genre_id INT REFERENCES genres(id) ON DELETE CASCADE,
   PRIMARY KEY (song_id, genre_id)
 );
 
--- Daily Challenges -> WORKING!!!
+-- Daily Challenges -> Still Working!!!
 CREATE TABLE daily_challenges (
   id SERIAL PRIMARY KEY,
   song_id INT REFERENCES songs(id) ON DELETE CASCADE,
@@ -88,17 +88,26 @@ CREATE TABLE daily_challenges (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Guesses -> WORKING!!!
-CREATE TABLE guesses (
+-- Challenge Progress -> Still Working!!!
+CREATE TABLE challenge_progress (
   id SERIAL PRIMARY KEY,
-  nickname VARCHAR(20),
+  nickname VARCHAR(20) NOT NULL,
   challenge_id INT REFERENCES daily_challenges(id) ON DELETE CASCADE,
-  guess JSONB,
-  score INT,
-  created_at TIMESTAMPTZ DEFAULT now()
+  attempt_count INT NOT NULL DEFAULT 1,
+  last_guess JSONB NOT NULL,
+  is_completed BOOLEAN DEFAULT false,
+  updated_at TIMESTAMPTZ DEFAULT now()
 );
-CREATE INDEX guesses_nickname_idx ON guesses(nickname);
-CREATE INDEX guesses_challenge_id_idx ON guesses(challenge_id);
+
+-- Challenge Results -> Still Working!!!
+CREATE TABLE challenge_results (
+  id SERIAL PRIMARY KEY,
+  nickname VARCHAR(20) NOT NULL,
+  challenge_id INT REFERENCES daily_challenges(id) ON DELETE CASCADE,
+  total_attempts INT NOT NULL,
+  final_score INT NOT NULL,
+  completed_at TIMESTAMPTZ DEFAULT now()
+);
 
 -- Controller Logs -> Implemented in Spring Boot.
 CREATE TABLE controller_logs (
@@ -113,3 +122,11 @@ CREATE TABLE controller_logs (
 );
 CREATE INDEX idx_controller_logs_endpoint ON controller_logs (endpoint);
 CREATE INDEX idx_controller_logs_time ON controller_logs (executed_at);
+
+/*
+ * TODO: Challenge tables created. It needs refactoring for better I/O handling.
+ * Also, it needs triggers to auto - calculate the final points based on the metrics.
+ * Self Note: These tables need further planning for future-proof coding.
+ * While creating, embrace experimenting with tweaking tables.
+ * 
+ * */

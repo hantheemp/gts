@@ -115,20 +115,31 @@ VALUES (3, '2026-01-05', '["genre","release_year","language"]');
 INSERT INTO daily_challenges (song_id, challenge_date, metrics)
 VALUES (6, '2026-01-06', '["genre","duration","country"]');
 
--- Guesses for Jan 4, 2026 challenge (Silent Waves)
-INSERT INTO guesses (nickname, challenge_id, guess, score)
-VALUES
-('musicfan01', 1, '{"genre":"Indie Rock","release_year":2021,"duration":"over_3min","language":"English","country":"Turkey"}', 5),
-('indielover', 1, '{"genre":"Acoustic","release_year":2020,"duration":"under_3min","language":"Turkish","country":"Turkey"}', 2);
+-- Player "indielover" is working on Jan 4 challenge
+INSERT INTO challenge_progress (nickname, challenge_id, attempt_count, last_guess, is_correct)
+VALUES ('indielover', 1, 1, '{"genre":"Acoustic","release_year":2020,"duration":"under_3min","language":"Turkish","country":"Turkey"}', false);
 
--- Guesses for Jan 5, 2026 challenge (City Lights)
-INSERT INTO guesses (nickname, challenge_id, guess, score)
-VALUES
-('nycplayer', 2, '{"genre":"Singer-Songwriter","release_year":2020,"language":"English"}', 3),
-('guessmaster', 2, '{"genre":"Indie Rock","release_year":2019,"language":"English"}', 2);
+-- Player "musicfan01" is on their 2nd attempt
+INSERT INTO challenge_progress (nickname, challenge_id, attempt_count, last_guess, is_correct)
+VALUES ('musicfan01', 1, 2, '{"genre":"Indie Rock","release_year":2021,"duration":"over_3min","language":"English","country":"Turkey"}', true);
 
--- Guesses for Jan 6, 2026 challenge (Echoes)
-INSERT INTO guesses (nickname, challenge_id, guess, score)
-VALUES
-('altfan', 3, '{"genre":"Alternative","duration":"over_4min","country":"United Kingdom"}', 3),
-('wrongguess', 3, '{"genre":"Electronic","duration":"under_3min","country":"Germany"}', 1);
+-- Player "nycplayer" is attempting Jan 5 challenge
+INSERT INTO challenge_progress (nickname, challenge_id, attempt_count, last_guess, is_correct)
+VALUES ('nycplayer', 2, 1, '{"genre":"Singer-Songwriter","release_year":2020,"language":"English"}', true);
+
+-- Final results once players solve the challenge
+-- musicfan01 solved Jan 4 challenge in 2 attempts, all metrics correct
+INSERT INTO challenge_results (nickname, challenge_id, total_attempts, final_score)
+VALUES ('musicfan01', 1, 2, 3);
+
+-- indielover solved Jan 4 challenge in 4 attempts, fewer points
+INSERT INTO challenge_results (nickname, challenge_id, total_attempts, final_score)
+VALUES ('indielover', 1, 4, 1);
+
+-- nycplayer solved Jan 5 challenge in 1 attempt, perfect score
+INSERT INTO challenge_results (nickname, challenge_id, total_attempts, final_score)
+VALUES ('nycplayer', 2, 1, 3);
+
+-- altfan solved Jan 6 challenge in 3 attempts
+INSERT INTO challenge_results (nickname, challenge_id, total_attempts, final_score)
+VALUES ('altfan', 3, 3, 2);
