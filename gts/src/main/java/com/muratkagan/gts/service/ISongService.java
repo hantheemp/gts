@@ -1,17 +1,20 @@
-package com.muratkagan.gts.dataAccess;
+package com.muratkagan.gts.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.muratkagan.gts.entities.Song;
 
-public interface ISongDao {
+public interface ISongService {
 
-    List<Song> getAll();
+	List<Song> getAll();
 
     Optional<Song> getById(int id);
+    
+    boolean insert(Song song);
 
     boolean update(Song song);
 
     boolean delete(int id);
+	
 }

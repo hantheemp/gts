@@ -1,4 +1,4 @@
-package com.muratkagan.gts.dataAccess;
+package com.muratkagan.gts.dao;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +44,17 @@ public class SongDao implements ISongDao {
 		Song result = session.find(Song.class, id);
 		return Optional.ofNullable(result);
 
+	}
+	
+	@Override
+	@Transactional
+	public boolean insert(Song song) {
+		
+		Session session = entityManager.unwrap(Session.class);
+		
+		session.persist(song);
+		return true;
+		
 	}
 
 	@Override

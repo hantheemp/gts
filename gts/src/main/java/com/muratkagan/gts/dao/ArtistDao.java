@@ -1,4 +1,4 @@
-package com.muratkagan.gts.dataAccess;
+package com.muratkagan.gts.dao;
 
 import java.util.List;
 import java.util.Optional;

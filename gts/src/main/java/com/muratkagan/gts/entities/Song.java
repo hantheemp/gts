@@ -11,7 +11,7 @@ public class Song {
 
 	@Id
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 
 	@Column(name = "artist_id", nullable = false)
 	private Integer artistId;
@@ -42,11 +42,11 @@ public class Song {
 	
 	// Getters and setters.
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

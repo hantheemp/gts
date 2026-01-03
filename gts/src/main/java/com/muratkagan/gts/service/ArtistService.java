@@ -1,4 +1,4 @@
-package com.muratkagan.gts.business;
+package com.muratkagan.gts.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.muratkagan.gts.dataAccess.ArtistDao;
+import com.muratkagan.gts.dao.ArtistDao;
 import com.muratkagan.gts.entities.Artist;
 
 @Service

@@ -1,4 +1,4 @@
-package com.muratkagan.gts.business;
+package com.muratkagan.gts.service;
 
 import java.util.List;
 import java.util.Optional;
