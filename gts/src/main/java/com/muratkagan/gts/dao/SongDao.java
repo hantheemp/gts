@@ -20,11 +20,6 @@ public class SongDao implements ISongDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@Autowired
-	public SongDao(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
 	@Override
 	@Transactional
 	public List<Song> getAll() {
@@ -74,7 +69,7 @@ public class SongDao implements ISongDao {
 			persistedSong.setSubtitle(song.getSubtitle());
 			persistedSong.setReleaseDate(song.getReleaseDate());
 			persistedSong.setDurationSeconds(song.getDurationSeconds());
-			persistedSong.setLanguage(song.getLanguage());
+			persistedSong.setLanguageCode(song.getLanguageCode());
 
 			session.merge(persistedSong);
 			return true;

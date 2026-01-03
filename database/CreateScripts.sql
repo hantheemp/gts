@@ -19,8 +19,8 @@ CREATE TABLE artists (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   surname VARCHAR(100),
-  country_id INT REFERENCES country(id),
-  city_id INT REFERENCES city(id),
+  country_id INT REFERENCES countries(id),
+  city_id INT REFERENCES cities(id),
   bio TEXT,
   social_links JSONB,
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -52,3 +52,16 @@ CREATE TABLE songs (
 ); -- Other fundamentals of Song entity will take place in different tables for better architecture.
 CREATE INDEX songs_artist_idx ON songs (artist_id);
 CREATE INDEX songs_release_year_idx ON songs (release_year);
+
+CREATE TABLE controller_logs (
+    id BIGSERIAL PRIMARY KEY,
+    endpoint VARCHAR(255) NOT NULL,        
+    http_method VARCHAR(10) NOT NULL,      
+    request_payload JSONB,                
+    response_payload JSONB,                 
+    status_code INT NOT NULL,              
+    client_ip VARCHAR(50),                 
+    executed_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX idx_controller_logs_endpoint ON controller_logs (endpoint);
+CREATE INDEX idx_controller_logs_time ON controller_logs (executed_at);

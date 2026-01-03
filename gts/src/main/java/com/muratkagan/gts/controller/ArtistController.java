@@ -29,7 +29,7 @@ public class ArtistController {
 	}
 
 	// GET artist by ID
-	@GetMapping("/get{id}")
+	@GetMapping("/get/{id}")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
 		Artist artist = artistService.getById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Artist not found with id: " + id));

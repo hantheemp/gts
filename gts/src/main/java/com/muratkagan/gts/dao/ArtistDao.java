@@ -20,11 +20,6 @@ public class ArtistDao implements IArtistDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@Autowired
-	public ArtistDao(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
 	@Override
 	@Transactional
 	public List<Artist> getAll() {

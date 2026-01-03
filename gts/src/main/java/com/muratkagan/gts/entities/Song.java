@@ -2,7 +2,8 @@ package com.muratkagan.gts.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.UUID;
+
+
 import jakarta.persistence.*;
 
 @Entity
@@ -33,7 +34,7 @@ public class Song {
 	private Integer durationSeconds;
 
 	@Column(name = "language_code")
-	private String language;
+	private String languageCode;
 
 	@Column(name = "created_at", insertable = false, updatable = false)
 	private OffsetDateTime createdAt;
@@ -99,12 +100,12 @@ public class Song {
 		this.durationSeconds = durationSeconds;
 	}
 
-	public String getLanguage() {
-		return language;
+	public String getLanguageCode() {
+		return languageCode;
 	}
 
-	public void setLanguage(String language) {
-		this.language = language;
+	public void setLanguageCode(String languageCode) {
+		this.languageCode = languageCode;
 	}
 
 	public OffsetDateTime getCreatedAt() {

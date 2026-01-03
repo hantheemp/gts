@@ -1,4 +1,4 @@
-package com.muratkagan.gts.controller;
+package com.muratkagan.gts.lib;
 
 import com.muratkagan.gts.dto.APIResponse;
 import org.springframework.http.HttpStatus;
