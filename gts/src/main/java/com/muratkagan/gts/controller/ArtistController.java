@@ -30,7 +30,7 @@ public class ArtistController {
 
 	// GET artist by ID
 	@GetMapping("/get{id}")
-	public ResponseEntity<APIResponse> get(@PathVariable int id) {
+	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
 		Artist artist = artistService.getById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Artist not found with id: " + id));
 		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Artist retrieved successfully", artist));
@@ -61,7 +61,7 @@ public class ArtistController {
 
 	// DELETE artist by ID
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<APIResponse> delete(@PathVariable int id) {
+	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
 		boolean success = artistService.delete(id);
 		if (!success) {
 			throw new IllegalArgumentException("Artist not found with id: " + id);

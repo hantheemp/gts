@@ -25,7 +25,7 @@ public class ArtistService implements IArtistService {
 	}
 
 	@Override
-	public Optional<Artist> getById(int id) {
+	public Optional<Artist> getById(Integer id) {
 		return artistDao.getById(id);
 	}
 	
@@ -40,7 +40,7 @@ public class ArtistService implements IArtistService {
 	}
 
 	@Override
-	public boolean delete(int id) {
+	public boolean delete(Integer id) {
 		return artistDao.delete(id);
 	}
 

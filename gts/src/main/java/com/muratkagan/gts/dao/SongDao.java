@@ -37,7 +37,7 @@ public class SongDao implements ISongDao {
 
 	@Override
 	@Transactional
-	public Optional<Song> getById(int id) {
+	public Optional<Song> getById(Integer id) {
 
 		Session session = entityManager.unwrap(Session.class);
 
@@ -84,7 +84,7 @@ public class SongDao implements ISongDao {
 
 	@Override
 	@Transactional
-	public boolean delete(int id) {
+	public boolean delete(Integer id) {
 
 		Session session = entityManager.unwrap(Session.class);
 

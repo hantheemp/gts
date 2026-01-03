@@ -9,12 +9,12 @@ public interface IArtistDao {
 	
 	List<Artist> getAll();
 	
-	Optional<Artist> getById(int id);
+	Optional<Artist> getById(Integer id);
 	
 	boolean insert(Artist artist);
 	
 	boolean update(Artist artist);
 	
-	boolean delete(int id);
+	boolean delete(Integer id);
 
 }

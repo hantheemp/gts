@@ -9,12 +9,12 @@ public interface ISongService {
 
 	List<Song> getAll();
 
-    Optional<Song> getById(int id);
+    Optional<Song> getById(Integer id);
     
     boolean insert(Song song);
 
     boolean update(Song song);
 
-    boolean delete(int id);
+    boolean delete(Integer id);
 	
 }

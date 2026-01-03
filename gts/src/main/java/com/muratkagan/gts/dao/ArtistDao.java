@@ -37,7 +37,7 @@ public class ArtistDao implements IArtistDao {
 
 	@Override
 	@Transactional
-	public Optional<Artist> getById(int id) {
+	public Optional<Artist> getById(Integer id) {
 
 		Session session = entityManager.unwrap(Session.class);
 
@@ -85,7 +85,7 @@ public class ArtistDao implements IArtistDao {
 
 	@Override
 	@Transactional
-	public boolean delete(int id) {
+	public boolean delete(Integer id) {
 
 		Session session = entityManager.unwrap(Session.class);
 

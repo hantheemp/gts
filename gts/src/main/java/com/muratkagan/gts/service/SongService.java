@@ -28,7 +28,7 @@ public class SongService implements ISongService {
 	}
 
 	@Override
-	public Optional<Song> getById(int id) {
+	public Optional<Song> getById(Integer id) {
 		return songDao.getById(id);
 	}
 
@@ -43,7 +43,7 @@ public class SongService implements ISongService {
 	}
 
 	@Override
-	public boolean delete(int id) {
+	public boolean delete(Integer id) {
 		return songDao.delete(id);
 	}
 

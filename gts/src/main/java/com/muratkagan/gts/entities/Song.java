@@ -11,6 +11,7 @@ public class Song {
 
 	@Id
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column(name = "artist_id", nullable = false)
