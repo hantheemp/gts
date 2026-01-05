@@ -29,8 +29,8 @@ public class GenreController {
 	}
 
 	// GET song by ID
-	@GetMapping("/get/")
-	public ResponseEntity<APIResponse> get(@RequestParam Integer id) {
+	@GetMapping("/get/{id}")
+	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
 		Genre genre = genreService.getById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Genre not found with id: " + id));
 		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Genre retrieved successfully", genre));
@@ -61,8 +61,8 @@ public class GenreController {
 	}
 
 	// DELETE song by ID
-	@DeleteMapping("/delete/")
-	public ResponseEntity<APIResponse> delete(@RequestParam Integer id) {
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
 		boolean success = genreService.delete(id);
 		if (!success) {
 			throw new IllegalArgumentException("Genre not found with id: " + id);

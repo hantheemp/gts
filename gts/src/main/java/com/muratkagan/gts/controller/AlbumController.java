@@ -29,8 +29,8 @@ public class AlbumController {
 	}
 
 	// GET song by ID
-	@GetMapping("/get/")
-	public ResponseEntity<APIResponse> get(@RequestParam Integer id) {
+	@DeleteMapping("/get/{id}")
+	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
 		Album album = albumService.getById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Album not found with id: " + id));
 		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Album retrieved successfully", album));
@@ -70,8 +70,8 @@ public class AlbumController {
 	}
 
 	// DELETE song by ID
-	@DeleteMapping("/delete/")
-	public ResponseEntity<APIResponse> delete(@RequestParam Integer id) {
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
 		boolean success = albumService.delete(id);
 		if (!success) {
 			throw new IllegalArgumentException("Album not found with id: " + id);
