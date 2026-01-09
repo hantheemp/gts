@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.hibernate.Session;
 
-import com.muratkagan.gts.entities.Mood;
 import com.muratkagan.gts.entities.SongMood;
 
 import jakarta.persistence.EntityManager;
