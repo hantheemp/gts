@@ -21,6 +21,8 @@ public class SongTempo {
 
 	@Column(name = "tempo_band")
 	private String tempoBand;
+	
+	// Getters and setters
 
 	public Integer getSongId() {
 		return songId;
