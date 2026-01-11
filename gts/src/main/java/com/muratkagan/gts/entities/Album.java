@@ -3,6 +3,9 @@ package com.muratkagan.gts.entities;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,8 +34,13 @@ public class Album {
 	@Column(name = "cover_art_url", columnDefinition = "text", nullable = false)
 	private String coverArtUrl;
 
+	@CreationTimestamp
 	@Column(name = "created_at", insertable = false, updatable = false)
 	private OffsetDateTime createdAt;
+	
+	@UpdateTimestamp
+	@Column(name = "updated_at", insertable = false, updatable = true)
+	private OffsetDateTime updatedAt;
 
 	// Getters and setters
 
@@ -82,6 +90,14 @@ public class Album {
 
 	public void setCreatedAt(OffsetDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public OffsetDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(OffsetDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 }

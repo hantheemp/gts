@@ -3,18 +3,22 @@ package com.muratkagan.gts.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.muratkagan.gts.dto.SongCreateDto;
+import com.muratkagan.gts.dto.SongListItemDto;
+import com.muratkagan.gts.dto.SongResponseDto;
+import com.muratkagan.gts.dto.SongUpdateDto;
 import com.muratkagan.gts.entities.Song;
 
 public interface ISongService {
 
-	List<Song> getAll();
+	List<SongListItemDto> getAll();
 
-    Optional<Song> getById(Integer id);
-    
-    boolean insert(Song song);
+	Optional<SongResponseDto> getById(Integer id);
 
-    boolean update(Song song);
+	SongResponseDto insert(SongCreateDto dto);
 
-    boolean delete(Integer id);
-	
+	SongResponseDto update(SongUpdateDto dto, Integer id);
+
+	void delete(Integer id);
+
 }

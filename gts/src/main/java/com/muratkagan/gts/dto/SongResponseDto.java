@@ -1,52 +1,31 @@
-package com.muratkagan.gts.entities;
+package com.muratkagan.gts.dto;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+public class SongResponseDto {
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "songs")
-public class Song {
-
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "artist_id", nullable = false)
 	private Integer artistId;
-	
-	@Column(name = "title", columnDefinition = "text", nullable = false)
+
+	private Integer albumId;
+
 	private String title;
-	
-	@Column(name = "subtitle", columnDefinition = "text")
+
 	private String subtitle;
 
-	@Column(name = "release_date")
 	private LocalDate releaseDate;
 
-	@Column(name = "release_year", insertable = false, updatable = false)
 	private Integer releaseYear;
 
-	@Column(name = "duration_seconds")
 	private Integer durationSeconds;
 
-	@Column(name = "language_code")
 	private String languageCode;
 
-	@CreationTimestamp
-	@Column(name = "created_at", insertable = false, updatable = false)
 	private OffsetDateTime createdAt;
 
-	@UpdateTimestamp
-	@Column(name = "updated_at", insertable = false, updatable = false)
 	private OffsetDateTime updatedAt;
-	
-	// Getters and setters.
 
 	public Integer getId() {
 		return id;
@@ -62,6 +41,14 @@ public class Song {
 
 	public void setArtistId(Integer artistId) {
 		this.artistId = artistId;
+	}
+
+	public Integer getAlbumId() {
+		return albumId;
+	}
+
+	public void setAlbumId(Integer albumId) {
+		this.albumId = albumId;
 	}
 
 	public String getTitle() {
@@ -127,4 +114,5 @@ public class Song {
 	public void setUpdatedAt(OffsetDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
 }

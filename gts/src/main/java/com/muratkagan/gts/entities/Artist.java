@@ -9,7 +9,9 @@ import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 @Entity
@@ -40,9 +42,11 @@ public class Artist {
     @Column(name = "social_links", columnDefinition = "jsonb")
     private Map<String, Object> socialLinks;
 
+    @CreationTimestamp
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
     

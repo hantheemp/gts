@@ -11,9 +11,9 @@ public interface ISongDao {
 
     Optional<Song> getById(Integer id);
     
-    boolean insert(Song song);
+    Song insert(Song song);
 
-    boolean update(Song song);
+    Song update(Song song);
 
     boolean delete(Integer id);
 }

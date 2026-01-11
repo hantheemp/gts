@@ -2,46 +2,55 @@ package com.muratkagan.gts.service;
 
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-
-import com.muratkagan.gts.dao.ArtistDao;
+import org.springframework.transaction.annotation.Transactional;
+import com.muratkagan.gts.dao.IArtistDao;
+import com.muratkagan.gts.dto.*;
 import com.muratkagan.gts.entities.Artist;
+import com.muratkagan.gts.mapper.ArtistMapper;
 
 @Service
+@Transactional
 public class ArtistService implements IArtistService {
 
-	@Autowired
-	public ArtistService(ArtistDao artistDao) {
+	private final IArtistDao artistDao;
+	private final ArtistMapper mapper;
+
+	public ArtistService(IArtistDao artistDao, ArtistMapper mapper) {
 		this.artistDao = artistDao;
-	}
-
-	private final ArtistDao artistDao;
-
-	@Override
-	public List<Artist> getAll() {
-		return artistDao.getAll();
+		this.mapper = mapper;
 	}
 
 	@Override
-	public Optional<Artist> getById(Integer id) {
-		return artistDao.getById(id);
-	}
-	
-	@Override
-	public boolean insert(Artist artist) {
-		return artistDao.insert(artist);
+	public List<ArtistListItemDto> getAll() {
+		return artistDao.getAll().stream().map(mapper::toListItem).collect(Collectors.toList());
 	}
 
 	@Override
-	public boolean update(Artist artist) {
-		return artistDao.update(artist);
+	public Optional<ArtistResponseDto> getById(Integer id) {
+		return artistDao.getById(id).map(mapper::toResponse);
 	}
 
 	@Override
-	public boolean delete(Integer id) {
-		return artistDao.delete(id);
+	public ArtistResponseDto create(ArtistCreateDto dto) {
+		Artist entity = mapper.toEntity(dto);
+		Artist persisted = artistDao.insert(entity);
+		return mapper.toResponse(persisted);
 	}
 
+	@Override
+	public ArtistResponseDto update(Integer id, ArtistUpdateDto dto) {
+		Artist existing = artistDao.getById(id).orElseThrow(() -> new IllegalArgumentException("Artist not found"));
+		mapper.updateFromDto(dto, existing);
+		Artist updated = artistDao.update(existing);
+		return mapper.toResponse(updated);
+	}
+
+	@Override
+	public void delete(Integer id) {
+		boolean removed = artistDao.delete(id);
+		if (!removed)
+			throw new IllegalArgumentException("Artist not found");
+	}
 }

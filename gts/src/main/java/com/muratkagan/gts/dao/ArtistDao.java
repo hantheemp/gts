@@ -1,5 +1,7 @@
 package com.muratkagan.gts.dao;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +22,6 @@ public class ArtistDao implements IArtistDao {
 	private EntityManager entityManager;
 
 	@Override
-	@Transactional
 	public List<Artist> getAll() {
 
 		Session session = entityManager.unwrap(Session.class);
@@ -30,68 +31,44 @@ public class ArtistDao implements IArtistDao {
 	}
 
 	@Override
-	@Transactional
 	public Optional<Artist> getById(Integer id) {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		Artist artist = session.find(Artist.class, id);
-
+		Artist artist = entityManager.find(Artist.class, id);
 		return Optional.ofNullable(artist);
 
 	}
-	
-	@Override
-	@Transactional
-	public boolean insert(Artist artist) {
-		
-		Session session = entityManager.unwrap(Session.class);
-		
-		session.persist(artist);
-		return true;
-		
+
+	public List<Artist> getByIds(Collection<Integer> ids) {
+		if (ids == null || ids.isEmpty())
+			return Collections.emptyList();
+		return entityManager.unwrap(Session.class)
+				.createQuery("SELECT a FROM Artist a WHERE a.id IN :ids", Artist.class).setParameter("ids", ids)
+				.getResultList();
 	}
 
 	@Override
-	@Transactional
-	public boolean update(Artist artist) {
+	public Artist insert(Artist artist) {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		Artist persistedArtist = session.find(Artist.class, artist.getId());
-		boolean doesArtistExists = (persistedArtist != null) ? true : false;
-
-		if (!doesArtistExists) {
-			return false;
-		} else {
-			persistedArtist.setName(artist.getName());
-			persistedArtist.setSurname(artist.getSurname());
-			persistedArtist.setCountryId(artist.getCountryId());
-			persistedArtist.setCityId(artist.getCityId());
-			persistedArtist.setBio(artist.getBio());
-			persistedArtist.setSocialLinks(artist.getSocialLinks());
-
-			session.merge(persistedArtist);
-			return true;
-		}
+		entityManager.persist(artist);
+		return artist;
 
 	}
 
 	@Override
-	@Transactional
+	public Artist update(Artist artist) {
+
+		return entityManager.merge(artist);
+
+	}
+
+	@Override
 	public boolean delete(Integer id) {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		Artist persistedArtist = session.find(Artist.class, id);
-		boolean doesArtistExists = (persistedArtist != null) ? true : false;
-
-		if (!doesArtistExists) {
+		Artist persisted = entityManager.find(Artist.class, id);
+		if (persisted == null)
 			return false;
-		} else {
-			session.remove(persistedArtist);
-			return true;
-		}
+		entityManager.remove(persisted);
+		return true;
 
 	}
 

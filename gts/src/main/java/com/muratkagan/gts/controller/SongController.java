@@ -1,82 +1,57 @@
 package com.muratkagan.gts.controller;
 
+import java.net.URI;
 import java.util.List;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.muratkagan.gts.entities.Song;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.muratkagan.gts.dto.*;
 import com.muratkagan.gts.service.SongService;
 import com.muratkagan.gts.dto.APIResponse;
 
 @RestController
-@RequestMapping("/song")
+@RequestMapping("/api/v1/songs")
 public class SongController {
 
 	private final SongService songService;
 
-	@Autowired
 	public SongController(SongService songService) {
 		this.songService = songService;
 	}
 
-	// GET all songs
-	@GetMapping("/getAll")
+	@GetMapping
 	public ResponseEntity<APIResponse> getAll() {
-		List<Song> songs = songService.getAll();
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Songs retrieved successfully", songs));
+		List<SongListItemDto> items = songService.getAll();
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Songs retrieved", items));
 	}
 
-	// GET song by ID
-	@GetMapping("/get/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
-		Song song = songService.getById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Song not found with id: " + id));
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Song retrieved successfully", song));
+		SongResponseDto dto = songService.getById(id).orElseThrow(() -> new IllegalArgumentException("Song not found"));
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Song retrieved", dto));
 	}
 
-	// POST new song
-	@PostMapping("/insert")
-	public ResponseEntity<APIResponse> insert(@RequestBody Song song) {
-		if (song.getTitle() == null || song.getTitle().isBlank()) {
-			throw new IllegalArgumentException("Song title must not be empty");
-		}
-		if (song.getArtistId() == null) {
-			throw new IllegalArgumentException("Artist ID must not be empty");
-		}
-
-		boolean success = songService.insert(song);
-		if (!success) {
-			throw new RuntimeException("Failed to insert song");
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Song created successfully", song));
+	@PostMapping
+	public ResponseEntity<APIResponse> insert(@Valid @RequestBody SongCreateDto dto) {
+		SongResponseDto created = songService.insert(dto);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(created.getId())
+				.toUri();
+		APIResponse payload = new APIResponse("SUCCESS", HttpStatus.CREATED.value(), "Song created", created);
+		return ResponseEntity.created(location).body(payload);
 	}
 
-	// PUT update song
-	@PutMapping("/update")
-	public ResponseEntity<APIResponse> update(@RequestBody Song song) {
-		if (song.getId() == null) {
-			throw new IllegalArgumentException("Song ID must not be empty");
-		}
-
-		boolean success = songService.update(song);
-		if (!success) {
-			throw new RuntimeException("Failed to update song with id: " + song.getId());
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Song updated successfully", song));
+	@PutMapping("/{id}")
+	public ResponseEntity<APIResponse> update(@PathVariable Integer id, @Valid @RequestBody SongUpdateDto dto) {
+		SongResponseDto updated = songService.update(dto, id);
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Song updated", updated));
 	}
 
-	// DELETE song by ID
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
-		boolean success = songService.delete(id);
-		if (!success) {
-			throw new IllegalArgumentException("Song not found with id: " + id);
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Song deleted successfully"));
+		songService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

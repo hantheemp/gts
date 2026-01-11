@@ -33,46 +33,26 @@ public class SongDao implements ISongDao {
 	@Transactional
 	public Optional<Song> getById(Integer id) {
 
-		Session session = entityManager.unwrap(Session.class);
+		Song song = entityManager.find(Song.class, id);
+		return Optional.ofNullable(song);
 
-		Song result = session.find(Song.class, id);
-		return Optional.ofNullable(result);
-
-	}
-	
-	@Override
-	@Transactional
-	public boolean insert(Song song) {
-		
-		Session session = entityManager.unwrap(Session.class);
-		
-		session.persist(song);
-		return true;
-		
 	}
 
 	@Override
 	@Transactional
-	public boolean update(Song song) {
+	public Song insert(Song song) {
 
-		Session session = entityManager.unwrap(Session.class);
-		Song persistedSong = session.find(Song.class, song.getId());
-		boolean doesSongExists = (persistedSong != null) ? true : false;
+		entityManager.persist(song);
+		return song;
 
-		if (!doesSongExists) {
-			return false;
-		} else {
+	}
 
-			persistedSong.setArtistId(song.getArtistId());
-			persistedSong.setTitle(song.getTitle());
-			persistedSong.setSubtitle(song.getSubtitle());
-			persistedSong.setReleaseDate(song.getReleaseDate());
-			persistedSong.setDurationSeconds(song.getDurationSeconds());
-			persistedSong.setLanguageCode(song.getLanguageCode());
+	@Override
+	@Transactional
+	public Song update(Song song) {
 
-			session.merge(persistedSong);
-			return true;
-		}
+		entityManager.merge(song);
+		return song;
 
 	}
 
@@ -80,15 +60,11 @@ public class SongDao implements ISongDao {
 	@Transactional
 	public boolean delete(Integer id) {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		Song persistedSong = session.find(Song.class, id);
-		boolean doesSongExists = (persistedSong != null) ? true : false;
-
-		if (!doesSongExists) {
+		Song song = entityManager.find(Song.class, id);
+		if (song == null) {
 			return false;
 		} else {
-			session.remove(persistedSong);
+			entityManager.remove(song);
 			return true;
 		}
 

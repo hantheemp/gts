@@ -1,71 +1,57 @@
 package com.muratkagan.gts.controller;
 
+import java.net.URI;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.muratkagan.gts.entities.Artist;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.muratkagan.gts.dto.*;
 import com.muratkagan.gts.service.ArtistService;
 import com.muratkagan.gts.dto.APIResponse;
 
 @RestController
-@RequestMapping("/artist")
+@RequestMapping("/api/v1/artists")
 public class ArtistController {
 
 	private final ArtistService artistService;
 
-	@Autowired
 	public ArtistController(ArtistService artistService) {
 		this.artistService = artistService;
 	}
 
-	// GET all artists
-	@GetMapping("/getAll")
+	@GetMapping
 	public ResponseEntity<APIResponse> getAll() {
-		List<Artist> artists = artistService.getAll();
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Artists retrieved successfully", artists));
+		List<ArtistListItemDto> items = artistService.getAll();
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Artists retrieved", items));
 	}
 
-	// GET artist by ID
-	@GetMapping("/get/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
-		Artist artist = artistService.getById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Artist not found with id: " + id));
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Artist retrieved successfully", artist));
+		ArtistResponseDto dto = artistService.getById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Artist not found"));
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Artist retrieved", dto));
 	}
 
-	// POST new artist
-	@PostMapping("/insert")
-	public ResponseEntity<APIResponse> insert(@RequestBody Artist artist) {
-		if (artist.getName() == null || artist.getName().isBlank()) {
-			throw new IllegalArgumentException("Artist name must not be empty");
-		}
-		boolean success = artistService.insert(artist);
-		if (!success) {
-			throw new RuntimeException("Failed to insert artist");
-		}
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Artist created successfully", artist));
+	@PostMapping
+	public ResponseEntity<APIResponse> insert(@Valid @RequestBody ArtistCreateDto dto) {
+		ArtistResponseDto created = artistService.create(dto);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(created.getId())
+				.toUri();
+		APIResponse payload = new APIResponse("SUCCESS", HttpStatus.CREATED.value(), "Artist created", created);
+		return ResponseEntity.created(location).body(payload);
 	}
 
-	// PUT update artist
-	@PutMapping("/update")
-	public ResponseEntity<APIResponse> update(@RequestBody Artist artist) {
-		boolean success = artistService.update(artist);
-		if (!success) {
-			throw new IllegalArgumentException("Failed to update artist with id: " + artist.getId());
-		}
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Artist updated successfully", artist));
+	@PutMapping("/{id}")
+	public ResponseEntity<APIResponse> update(@PathVariable Integer id, @Valid @RequestBody ArtistUpdateDto dto) {
+		ArtistResponseDto updated = artistService.update(id, dto);
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Artist updated", updated));
 	}
 
-	// DELETE artist by ID
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
-		boolean success = artistService.delete(id);
-		if (!success) {
-			throw new IllegalArgumentException("Artist not found with id: " + id);
-		}
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Artist deleted successfully"));
+		artistService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

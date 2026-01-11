@@ -3,9 +3,12 @@ package com.muratkagan.gts.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.muratkagan.gts.dao.SongMoodDao;
 import com.muratkagan.gts.entities.SongMood;
 
+@Service
 public class SongMoodService implements ISongMoodService {
 
 	private SongMoodDao songMoodDao;

@@ -3,6 +3,7 @@ package com.muratkagan.gts.entities;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -26,9 +27,13 @@ public class ControllerLog {
 	@Column(name = "response_payload", columnDefinition = "jsonb")
 	private Map<String, Object> responsePayload;
 
+	@Column(name = "status_code")
 	private Integer statusCode;
+	
+	@Column(name = "client_ip")
 	private String clientIp;
 
+	@CreationTimestamp
 	@Column(insertable = false, updatable = false)
 	private OffsetDateTime executedAt;
 
