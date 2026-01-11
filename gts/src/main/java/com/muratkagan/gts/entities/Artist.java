@@ -20,34 +20,34 @@ public class Artist {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", columnDefinition = "serial")
+	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "name", columnDefinition = "varchar(100) not null")
+	@Column(name = "name")
 	private String name;
 
-	@Column(name = "surname", columnDefinition = "varchar(100) not null")
+	@Column(name = "surname")
 	private String surname;
 
-	@Column(name = "country_id", columnDefinition = "integer not null")
+	@Column(name = "country_id")
 	private int countryId;
 
-	@Column(name = "city_id", columnDefinition = "integer not null")
+	@Column(name = "city_id")
 	private int cityId;
 
-	@Column(name = "bio", columnDefinition = "text")
+	@Column(name = "bio")
 	private String bio;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "social_links", columnDefinition = "jsonb")
+	@Column(name = "social_links")
 	private Map<String, Object> socialLinks;
 
 	@CreationTimestamp
-	@Column(name = "created_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	@Column(name = "created_at", insertable = false, updatable = false)
 	private OffsetDateTime createdAt;
 
 	@UpdateTimestamp
-	@Column(name = "updated_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	@Column(name = "updated_at", insertable = false, updatable = false)
 	private OffsetDateTime updatedAt;
 
 	// Getters and setters

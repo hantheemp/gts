@@ -17,33 +17,33 @@ public class Song {
 	@Column(name = "id", columnDefinition = "serial")
 	private Integer id;
 
-	@Column(name = "artist_id", columnDefinition = "integer not null", nullable = false)
+	@Column(name = "artist_id", nullable = false)
 	private Integer artistId;
 
-	@Column(name = "title", columnDefinition = "text", nullable = false)
+	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "subtitle", columnDefinition = "text")
+	@Column(name = "subtitle")
 	private String subtitle;
 
-	@Column(name = "release_date", columnDefinition = "date not null")
+	@Column(name = "release_date")
 	private LocalDate releaseDate;
 
-	@Column(name = "duration_seconds", columnDefinition = "integer")
+	@Column(name = "duration_seconds")
 	private Integer durationSeconds;
 
-	@Column(name = "language_code", columnDefinition = "varchar(100) not null")
+	@Column(name = "language_code")
 	private String languageCode;
 
 	@CreationTimestamp
-	@Column(name = "created_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	@Column(name = "created_at", insertable = false, updatable = false)
 	private OffsetDateTime createdAt;
 
 	@UpdateTimestamp
-	@Column(name = "updated_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	@Column(name = "updated_at", insertable = false, updatable = false)
 	private OffsetDateTime updatedAt;
 
-	// Getters and setters.
+	// Getters and setters
 
 	public Integer getId() {
 		return id;

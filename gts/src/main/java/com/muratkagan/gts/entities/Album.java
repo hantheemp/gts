@@ -2,10 +2,8 @@ package com.muratkagan.gts.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,34 +14,31 @@ import jakarta.persistence.GenerationType;
 @Entity
 @Table(name = "albums")
 public class Album {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", columnDefinition = "serial")
 	private Integer id;
 
-	@Column(name = "artist_id", columnDefinition = "integer not null", nullable = false)
+	@Column(name = "artist_id", nullable = false)
 	private Integer artistId;
 
-	@Column(name = "title", columnDefinition = "varchar(200) not null", nullable = false)
+	@Column(name = "title", length = 200, nullable = false)
 	private String title;
 
-	@Column(name = "release_date", columnDefinition = "date not null")
+	@Column(name = "release_date")
 	private LocalDate releaseDate;
 
-	@Column(name = "cover_art_url", columnDefinition = "text", nullable = false)
+	@Column(name = "cover_art_url", nullable = false)
 	private String coverArtUrl;
 
 	@CreationTimestamp
-	@Column(name = "created_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	@Column(name = "created_at", updatable = false)
 	private OffsetDateTime createdAt;
 
 	@UpdateTimestamp
-	@Column(name = "updated_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	@Column(name = "updated_at")
 	private OffsetDateTime updatedAt;
 
 	// Getters and setters
-
 	public Integer getId() {
 		return id;
 	}
@@ -99,5 +94,4 @@ public class Album {
 	public void setUpdatedAt(OffsetDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
 }
