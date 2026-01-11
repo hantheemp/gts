@@ -7,7 +7,6 @@ import com.muratkagan.gts.dto.SongCreateDto;
 import com.muratkagan.gts.dto.SongListItemDto;
 import com.muratkagan.gts.dto.SongResponseDto;
 import com.muratkagan.gts.dto.SongUpdateDto;
-import com.muratkagan.gts.entities.Song;
 
 public interface ISongService {
 

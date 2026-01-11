@@ -13,39 +13,36 @@ import jakarta.persistence.*;
 public class Song {
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", columnDefinition = "serial")
 	private Integer id;
 
-	@Column(name = "artist_id", nullable = false)
+	@Column(name = "artist_id", columnDefinition = "integer not null", nullable = false)
 	private Integer artistId;
-	
+
 	@Column(name = "title", columnDefinition = "text", nullable = false)
 	private String title;
-	
+
 	@Column(name = "subtitle", columnDefinition = "text")
 	private String subtitle;
 
-	@Column(name = "release_date")
+	@Column(name = "release_date", columnDefinition = "date not null")
 	private LocalDate releaseDate;
 
-	@Column(name = "release_year", insertable = false, updatable = false)
-	private Integer releaseYear;
-
-	@Column(name = "duration_seconds")
+	@Column(name = "duration_seconds", columnDefinition = "integer")
 	private Integer durationSeconds;
 
-	@Column(name = "language_code")
+	@Column(name = "language_code", columnDefinition = "varchar(100) not null")
 	private String languageCode;
 
 	@CreationTimestamp
-	@Column(name = "created_at", insertable = false, updatable = false)
+	@Column(name = "created_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
 	private OffsetDateTime createdAt;
 
 	@UpdateTimestamp
-	@Column(name = "updated_at", insertable = false, updatable = false)
+	@Column(name = "updated_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
 	private OffsetDateTime updatedAt;
-	
+
 	// Getters and setters.
 
 	public Integer getId() {
@@ -86,14 +83,6 @@ public class Song {
 
 	public void setReleaseDate(LocalDate releaseDate) {
 		this.releaseDate = releaseDate;
-	}
-
-	public Integer getReleaseYear() {
-		return releaseYear;
-	}
-
-	public void setReleaseYear(Integer releaseYear) {
-		this.releaseYear = releaseYear;
 	}
 
 	public Integer getDurationSeconds() {

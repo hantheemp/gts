@@ -1,5 +1,7 @@
 package com.muratkagan.gts.dao;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +22,6 @@ public class AlbumDao implements IAlbumDao {
 	private EntityManager entityManager;
 
 	@Override
-	@Transactional
 	public List<Album> getAll() {
 		Session session = entityManager.unwrap(Session.class);
 
@@ -28,55 +29,41 @@ public class AlbumDao implements IAlbumDao {
 	}
 
 	@Override
-	@Transactional
 	public Optional<Album> getById(Integer id) {
-		Session session = entityManager.unwrap(Session.class);
 
-		return Optional.ofNullable(session.find(Album.class, id));
+		Album album = entityManager.find(Album.class, id);
+		return Optional.ofNullable(album);
+
+	}
+
+	public List<Album> getByIds(Collection<Integer> ids) {
+		if (ids == null || ids.isEmpty())
+			return Collections.emptyList();
+		return entityManager.unwrap(Session.class).createQuery("SELECT a FROM Album a WHERE a.id IN :ids", Album.class)
+				.setParameter("ids", ids).getResultList();
 	}
 
 	@Override
-	@Transactional
-	public boolean insert(Album album) {
-		Session session = entityManager.unwrap(Session.class);
-
-		session.persist(album);
-		return true;
+	public Album insert(Album album) {
+		entityManager.persist(album);
+		return album;
 	}
 
 	@Override
-	@Transactional
-	public boolean update(Album album) {
-		Session session = entityManager.unwrap(Session.class);
-
-		Album persistedAlbum = session.find(Album.class, album.getId());
-		boolean doesAlbumExists = (persistedAlbum != null) ? true : false;
-
-		if (!doesAlbumExists) {
-			return false;
-		} else {
-			persistedAlbum.setArtistId(album.getArtistId());
-			persistedAlbum.setTitle(album.getTitle());
-			persistedAlbum.setReleaseDate(album.getReleaseDate());
-			persistedAlbum.setReleaseDate(album.getReleaseDate());
-
-			session.merge(persistedAlbum);
-			return true;
-		}
+	public Album update(Album album) {
+		entityManager.merge(album);
+		return album;
 	}
 
 	@Override
-	@Transactional
 	public boolean delete(Integer id) {
-		Session session = entityManager.unwrap(Session.class);
 
-		Album persistedAlbum = session.find(Album.class, id);
-		boolean doesAlbumExists = (persistedAlbum != null) ? true : false;
+		Album album = entityManager.find(Album.class, id);
 
-		if (!doesAlbumExists) {
+		if (album == null) {
 			return false;
 		} else {
-			session.remove(persistedAlbum);
+			entityManager.remove(album);
 			return true;
 		}
 

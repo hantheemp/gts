@@ -1,47 +1,24 @@
-package com.muratkagan.gts.entities;
+package com.muratkagan.gts.dto;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+public class AlbumResponseDto {
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
-
-@Entity
-@Table(name = "albums")
-public class Album {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", columnDefinition = "serial")
 	private Integer id;
-
-	@Column(name = "artist_id", columnDefinition = "integer not null", nullable = false)
+	
 	private Integer artistId;
-
-	@Column(name = "title", columnDefinition = "varchar(200) not null", nullable = false)
+	
 	private String title;
-
-	@Column(name = "release_date", columnDefinition = "date not null")
+	
 	private LocalDate releaseDate;
-
-	@Column(name = "cover_art_url", columnDefinition = "text", nullable = false)
+	
 	private String coverArtUrl;
-
-	@CreationTimestamp
-	@Column(name = "created_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	
 	private OffsetDateTime createdAt;
-
-	@UpdateTimestamp
-	@Column(name = "updated_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	
 	private OffsetDateTime updatedAt;
-
+	
 	// Getters and setters
 
 	public Integer getId() {

@@ -18,39 +18,39 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "artists")
 public class Artist {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", columnDefinition = "serial")
+	private Integer id;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name", columnDefinition = "varchar(100) not null")
+	private String name;
 
-    @Column(name = "surname")
-    private String surname;
+	@Column(name = "surname", columnDefinition = "varchar(100) not null")
+	private String surname;
 
-    @Column(name = "country_id")
-    private int countryId;
-    
-    @Column(name = "city_id")
-    private int cityId;
+	@Column(name = "country_id", columnDefinition = "integer not null")
+	private int countryId;
 
-    @Column(name = "bio", columnDefinition = "text")
-    private String bio;
+	@Column(name = "city_id", columnDefinition = "integer not null")
+	private int cityId;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "social_links", columnDefinition = "jsonb")
-    private Map<String, Object> socialLinks;
+	@Column(name = "bio", columnDefinition = "text")
+	private String bio;
 
-    @CreationTimestamp
-    @Column(name = "created_at", insertable = false, updatable = false)
-    private OffsetDateTime createdAt;
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "social_links", columnDefinition = "jsonb")
+	private Map<String, Object> socialLinks;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at", insertable = false, updatable = false)
-    private OffsetDateTime updatedAt;
-    
-    // Getters and setters
+	@CreationTimestamp
+	@Column(name = "created_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	private OffsetDateTime createdAt;
+
+	@UpdateTimestamp
+	@Column(name = "updated_at", columnDefinition = "timestamp with time zone", insertable = false, updatable = false)
+	private OffsetDateTime updatedAt;
+
+	// Getters and setters
 
 	public Integer getId() {
 		return id;
@@ -83,11 +83,11 @@ public class Artist {
 	public void setCountryId(int countryId) {
 		this.countryId = countryId;
 	}
-	
+
 	public int getCityId() {
 		return cityId;
 	}
-	
+
 	public void setCityId(int cityId) {
 		this.cityId = cityId;
 	}
@@ -123,5 +123,5 @@ public class Artist {
 	public void setUpdatedAt(OffsetDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-    
+
 }

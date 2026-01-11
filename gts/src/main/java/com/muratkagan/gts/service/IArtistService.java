@@ -14,7 +14,7 @@ public interface IArtistService {
 
 	Optional<ArtistResponseDto> getById(Integer id);
 
-	ArtistResponseDto create(ArtistCreateDto dto);
+	ArtistResponseDto insert(ArtistCreateDto dto);
 
 	ArtistResponseDto update(Integer id, ArtistUpdateDto dto);
 

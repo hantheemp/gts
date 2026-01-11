@@ -34,12 +34,12 @@ public class ArtistController {
 		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Artist retrieved", dto));
 	}
 
-	@PostMapping
+	@PostMapping("/insert")
 	public ResponseEntity<APIResponse> insert(@Valid @RequestBody ArtistCreateDto dto) {
-		ArtistResponseDto created = artistService.create(dto);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(created.getId())
+		ArtistResponseDto inserted = artistService.insert(dto);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(inserted.getId())
 				.toUri();
-		APIResponse payload = new APIResponse("SUCCESS", HttpStatus.CREATED.value(), "Artist created", created);
+		APIResponse payload = new APIResponse("SUCCESS", HttpStatus.CREATED.value(), "Artist created", inserted);
 		return ResponseEntity.created(location).body(payload);
 	}
 

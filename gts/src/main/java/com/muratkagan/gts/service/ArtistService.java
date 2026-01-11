@@ -33,7 +33,7 @@ public class ArtistService implements IArtistService {
 	}
 
 	@Override
-	public ArtistResponseDto create(ArtistCreateDto dto) {
+	public ArtistResponseDto insert(ArtistCreateDto dto) {
 		Artist entity = mapper.toEntity(dto);
 		Artist persisted = artistDao.insert(entity);
 		return mapper.toResponse(persisted);

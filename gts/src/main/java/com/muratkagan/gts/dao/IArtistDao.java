@@ -12,7 +12,7 @@ public interface IArtistDao {
 
 	Optional<Artist> getById(Integer id);
 
-	public List<Artist> getByIds(Collection<Integer> ids);
+	List<Artist> getByIds(Collection<Integer> ids);
 
 	Artist insert(Artist artist);
 

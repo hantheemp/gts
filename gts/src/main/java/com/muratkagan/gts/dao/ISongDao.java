@@ -1,5 +1,6 @@
 package com.muratkagan.gts.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,8 @@ public interface ISongDao {
     List<Song> getAll();
 
     Optional<Song> getById(Integer id);
+    
+    List<Song> getByIds(Collection<Integer> ids);
     
     Song insert(Song song);
 

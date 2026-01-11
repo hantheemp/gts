@@ -34,7 +34,7 @@ public class SongController {
 		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Song retrieved", dto));
 	}
 
-	@PostMapping
+	@PostMapping("/insert")
 	public ResponseEntity<APIResponse> insert(@Valid @RequestBody SongCreateDto dto) {
 		SongResponseDto created = songService.insert(dto);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(created.getId())

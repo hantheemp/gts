@@ -1,82 +1,57 @@
 package com.muratkagan.gts.controller;
 
+import java.net.URI;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.muratkagan.gts.entities.Album;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.muratkagan.gts.dto.*;
 import com.muratkagan.gts.service.AlbumService;
 import com.muratkagan.gts.dto.APIResponse;
 
 @RestController
-@RequestMapping("/album")
+@RequestMapping("/api/v1/albums")
 public class AlbumController {
 
 	private final AlbumService albumService;
 
-	@Autowired
 	public AlbumController(AlbumService albumService) {
 		this.albumService = albumService;
 	}
 
-	// GET all songs
-	@GetMapping("/getAll")
+	@GetMapping
 	public ResponseEntity<APIResponse> getAll() {
-		List<Album> songs = albumService.getAll();
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Albums retrieved successfully", songs));
+		List<AlbumListItemDto> items = albumService.getAll();
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Albums retrieved", items));
 	}
 
-	// GET song by ID
-	@DeleteMapping("/get/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
-		Album album = albumService.getById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Album not found with id: " + id));
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Album retrieved successfully", album));
+		AlbumResponseDto dto = albumService.getById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Album not found"));
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Album retrieved", dto));
 	}
 
-	// POST new song
 	@PostMapping("/insert")
-	public ResponseEntity<APIResponse> insert(@RequestBody Album album) {
-		if (album.getTitle() == null || album.getTitle().isBlank()) {
-			throw new IllegalArgumentException("Album title must not be empty");
-		}
-		if (album.getArtistId() == null) {
-			throw new IllegalArgumentException("Artist ID must not be empty");
-		}
-
-		boolean success = albumService.insert(album);
-		if (!success) {
-			throw new RuntimeException("Failed to insert album");
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Album created successfully", album));
+	public ResponseEntity<APIResponse> insert(@Valid @RequestBody AlbumCreateDto dto) {
+		AlbumResponseDto inserted = albumService.insert(dto);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(inserted.getId())
+				.toUri();
+		APIResponse payload = new APIResponse("SUCCESS", HttpStatus.CREATED.value(), "Album created", inserted);
+		return ResponseEntity.created(location).body(payload);
 	}
 
-	// PUT update song
-	@PutMapping("/update")
-	public ResponseEntity<APIResponse> update(@RequestBody Album album) {
-		if (album.getId() == null) {
-			throw new IllegalArgumentException("Album ID must not be empty");
-		}
-
-		boolean success = albumService.update(album);
-		if (!success) {
-			throw new RuntimeException("Failed to update album with id: " + album.getId());
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Album updated successfully", album));
+	@PutMapping("/{id}")
+	public ResponseEntity<APIResponse> update(@PathVariable Integer id, @Valid @RequestBody AlbumUpdateDto dto) {
+		AlbumResponseDto updated = albumService.update(dto, id);
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Album updated", updated));
 	}
 
-	// DELETE song by ID
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
-		boolean success = albumService.delete(id);
-		if (!success) {
-			throw new IllegalArgumentException("Album not found with id: " + id);
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Album deleted successfully"));
+		albumService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }
