@@ -43,13 +43,13 @@ public class ArtistController {
 		return ResponseEntity.created(location).body(payload);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<APIResponse> update(@PathVariable Integer id, @Valid @RequestBody ArtistUpdateDto dto) {
 		ArtistResponseDto updated = artistService.update(id, dto);
 		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Artist updated", updated));
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
 		artistService.delete(id);
 		return ResponseEntity.noContent().build();
