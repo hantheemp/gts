@@ -1,11 +1,9 @@
 package com.muratkagan.gts.dao;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.muratkagan.gts.entities.Album;
@@ -23,9 +21,9 @@ public class AlbumDao implements IAlbumDao {
 
 	@Override
 	public List<Album> getAll() {
-		
+
 		return entityManager.createQuery("SELECT a FROM Album a", Album.class).getResultList();
-		
+
 	}
 
 	@Override
@@ -37,9 +35,10 @@ public class AlbumDao implements IAlbumDao {
 	}
 
 	public List<Album> getByIds(Collection<Integer> ids) {
-		if (ids == null || ids.isEmpty())
-			return Collections.emptyList();
-		return entityManager.unwrap(Session.class).createQuery("SELECT a FROM Album a WHERE a.id IN :ids", Album.class)
+		if (ids == null || ids.isEmpty()) {
+			return List.of();
+		}
+		return entityManager.createQuery("SELECT a FROM Album a WHERE a.id IN :ids", Album.class)
 				.setParameter("ids", ids).getResultList();
 	}
 

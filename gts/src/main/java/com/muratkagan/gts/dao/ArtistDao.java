@@ -1,11 +1,9 @@
 package com.muratkagan.gts.dao;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.muratkagan.gts.entities.Artist;
@@ -37,11 +35,11 @@ public class ArtistDao implements IArtistDao {
 	}
 
 	public List<Artist> getByIds(Collection<Integer> ids) {
-		if (ids == null || ids.isEmpty())
-			return Collections.emptyList();
-		return entityManager.unwrap(Session.class)
-				.createQuery("SELECT a FROM Artist a WHERE a.id IN :ids", Artist.class).setParameter("ids", ids)
-				.getResultList();
+		if (ids == null || ids.isEmpty()) {
+			return List.of();
+		}
+		return entityManager.createQuery("SELECT a FROM Genre a WHERE a.id IN :ids", Artist.class)
+				.setParameter("ids", ids).getResultList();
 	}
 
 	@Override

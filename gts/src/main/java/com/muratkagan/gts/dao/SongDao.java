@@ -1,7 +1,6 @@
 package com.muratkagan.gts.dao;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,10 +38,11 @@ public class SongDao implements ISongDao {
 	}
 
 	public List<Song> getByIds(Collection<Integer> ids) {
-		if (ids == null || ids.isEmpty())
-			return Collections.emptyList();
-		return entityManager.unwrap(Session.class).createQuery("SELECT s FROM Song s WHERE s.id IN :ids", Song.class)
-				.setParameter("ids", ids).getResultList();
+		if (ids == null || ids.isEmpty()) {
+			return List.of();
+		}
+		return entityManager.createQuery("SELECT s FROM Song s WHERE s.id IN :ids", Song.class).setParameter("ids", ids)
+				.getResultList();
 	}
 
 	@Override
