@@ -1,25 +1,15 @@
 package com.muratkagan.gts.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class GenreUpdateDto {
 
-	@NotNull
-	private Integer id;
-
-	@NotBlank
+	@NotBlank(message = "Name is required")
+	@Size(max = 100, message = "Name must be at most 100 characters")
 	private String name;
 
 	// Getters and setters
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

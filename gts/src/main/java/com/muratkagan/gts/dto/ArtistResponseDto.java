@@ -4,20 +4,30 @@ import java.time.OffsetDateTime;
 import java.util.Map;
 
 public class ArtistResponseDto {
+
 	private Integer id;
+
 	private String name;
+
 	private String surname;
+
 	private Integer countryId;
-	private String countryName;
+
 	private Integer cityId;
-	private String cityName;
+
 	private String bio;
+
 	private Map<String, Object> socialLinks;
+
+	// AUDIT FIELDS START
+
 	private OffsetDateTime createdAt;
 	private OffsetDateTime updatedAt;
 
+	// AUDIT FIELDS END
+
 	// Getters and setters
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -50,28 +60,12 @@ public class ArtistResponseDto {
 		this.countryId = countryId;
 	}
 
-	public String getCountryName() {
-		return countryName;
-	}
-
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
-	}
-
 	public Integer getCityId() {
 		return cityId;
 	}
 
 	public void setCityId(Integer cityId) {
 		this.cityId = cityId;
-	}
-
-	public String getCityName() {
-		return cityName;
-	}
-
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
 	}
 
 	public String getBio() {

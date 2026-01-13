@@ -1,25 +1,29 @@
 package com.muratkagan.gts.dto;
 
 import java.util.Map;
+
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class ArtistUpdateDto {
-	@Size(max = 200)
-	private String name;
 
-	@Size(max = 200)
-	private String surname;
+	@NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name must be at most 100 characters")
+    private String name;
 
-	private Integer countryId;
-	private Integer cityId;
+    @Size(max = 100, message = "Surname must be at most 100 characters")
+    private String surname;
 
-	@Size(max = 5000)
-	private String bio;
+    private Integer countryId;
+    private Integer cityId;
 
-	private Map<String, Object> socialLinks;
+    @Size(max = 5000, message = "Bio must be at most 5000 characters")
+    private String bio;
+
+    private Map<String, Object> socialLinks;
 
 	// Getters and setters
-	
+
 	public String getName() {
 		return name;
 	}

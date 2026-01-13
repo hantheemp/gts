@@ -5,16 +5,16 @@ import jakarta.validation.constraints.*;
 
 public class AlbumCreateDto {
 
-	@NotNull
+	@NotNull(message = "Artist ID is required")
 	private Integer artistId;
 
-	@NotBlank
+	@NotBlank(message = "Title is required")
+	@Size(max = 200, message = "Title must be at most 200 characters")
 	private String title;
 
-	@NotNull
+	@Size(max = 500, message = "Cover art URL must be at most 500 characters")
 	private LocalDate releaseDate;
 
-	@NotBlank
 	private String coverArtUrl;
 
 	// Getters and setters

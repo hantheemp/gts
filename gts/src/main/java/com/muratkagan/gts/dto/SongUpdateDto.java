@@ -4,23 +4,29 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class SongUpdateDto {
-	@NotNull
+
+	@NotNull(message = "Artist ID is required")
 	private Integer artistId;
 
 	private Integer albumId;
 
-	@NotBlank
+	@NotBlank(message = "Title is required")
+	@Size(max = 200, message = "Title must be at most 200 characters")
 	private String title;
 
+	@Size(max = 200, message = "Subtitle must be at most 200 characters")
 	private String subtitle;
 
+	@NotNull(message = "Release date is required")
 	private LocalDate releaseDate;
 
-	@Min(1)
+	@Min(value = 1, message = "Duration must be at least 1 second")
 	private Integer durationSeconds;
 
+	@Size(max = 3, message = "Language code must be short (e.g., 'en', 'tr')")
 	private String languageCode;
 
 	// Getters and setters

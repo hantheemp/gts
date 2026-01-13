@@ -1,14 +1,9 @@
 package com.muratkagan.gts.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 public class GenreResponseDto {
 
-	@NotNull
 	private Integer id;
-
-	@NotBlank
+	
 	private String name;
 
 	// Getters and setters

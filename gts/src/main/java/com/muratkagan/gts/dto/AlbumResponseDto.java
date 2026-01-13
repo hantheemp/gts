@@ -6,19 +6,22 @@ import java.time.OffsetDateTime;
 public class AlbumResponseDto {
 
 	private Integer id;
-	
+
 	private Integer artistId;
-	
+
 	private String title;
-	
+
 	private LocalDate releaseDate;
-	
+
 	private String coverArtUrl;
-	
+
+	// AUDIT FIELDS START
+
 	private OffsetDateTime createdAt;
-	
 	private OffsetDateTime updatedAt;
-	
+
+	// AUDIT FIELDS END
+
 	// Getters and setters
 
 	public Integer getId() {

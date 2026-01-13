@@ -17,15 +17,16 @@ public class SongResponseDto {
 
 	private LocalDate releaseDate;
 
-	private Integer releaseYear;
-
 	private Integer durationSeconds;
 
 	private String languageCode;
 
-	private OffsetDateTime createdAt;
+	// AUDIT FIELDS START
 
+	private OffsetDateTime createdAt;
 	private OffsetDateTime updatedAt;
+
+	// AUDIT FIELDS END
 
 	public Integer getId() {
 		return id;
@@ -73,14 +74,6 @@ public class SongResponseDto {
 
 	public void setReleaseDate(LocalDate releaseDate) {
 		this.releaseDate = releaseDate;
-	}
-
-	public Integer getReleaseYear() {
-		return releaseYear;
-	}
-
-	public void setReleaseYear(Integer releaseYear) {
-		this.releaseYear = releaseYear;
 	}
 
 	public Integer getDurationSeconds() {
