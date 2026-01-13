@@ -23,9 +23,9 @@ public class AlbumDao implements IAlbumDao {
 
 	@Override
 	public List<Album> getAll() {
-		Session session = entityManager.unwrap(Session.class);
-
-		return session.createQuery("SELECT a FROM Album a", Album.class).getResultList();
+		
+		return entityManager.createQuery("SELECT a FROM Album a", Album.class).getResultList();
+		
 	}
 
 	@Override

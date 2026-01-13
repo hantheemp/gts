@@ -36,11 +36,11 @@ public class Song {
 	private String languageCode;
 
 	@CreationTimestamp
-	@Column(name = "created_at", insertable = false, updatable = false)
+	@Column(name = "created_at", updatable = false)
 	private OffsetDateTime createdAt;
 
 	@UpdateTimestamp
-	@Column(name = "updated_at", insertable = false, updatable = false)
+	@Column(name = "updated_at")
 	private OffsetDateTime updatedAt;
 
 	// Getters and setters

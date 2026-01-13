@@ -2,46 +2,70 @@ package com.muratkagan.gts.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.muratkagan.gts.dao.GenreDao;
+import com.muratkagan.gts.dto.GenreCreateDto;
+import com.muratkagan.gts.dto.GenreListItemDto;
+import com.muratkagan.gts.dto.GenreResponseDto;
+import com.muratkagan.gts.dto.GenreUpdateDto;
 import com.muratkagan.gts.entities.Genre;
+import com.muratkagan.gts.mapper.GenreMapper;
 
 @Service
 public class GenreService implements IGenreService {
 
 	private final GenreDao genreDao;
+	private final GenreMapper mapper;
 
 	@Autowired
-	public GenreService(GenreDao genreDao) {
+	public GenreService(GenreDao genreDao, GenreMapper mapper) {
 		this.genreDao = genreDao;
+		this.mapper = mapper;
 	}
 
 	@Override
-	public List<Genre> getAll() {
-		return genreDao.getAll();
+	public List<GenreListItemDto> getAll() {
+		return genreDao.getAll().stream().map(mapper::toListItem).collect(Collectors.toList());
 	}
 
 	@Override
-	public Optional<Genre> getById(Integer id) {
-		return genreDao.getById(id);
+	public Optional<GenreResponseDto> getById(Integer id) {
+		return genreDao.getById(id).map(mapper::toResponse);
 	}
 
 	@Override
-	public boolean insert(Genre genre) {
-		return genreDao.insert(genre);
+	public GenreResponseDto insert(GenreCreateDto dto) {
+
+		Genre genre = mapper.toEntity(dto);
+
+		Genre persisted = genreDao.insert(genre);
+		return mapper.toResponse(persisted);
+
 	}
 
 	@Override
-	public boolean update(Genre genre) {
-		return genreDao.update(genre);
+	public GenreResponseDto update(GenreUpdateDto dto, Integer id) {
+
+		Genre existing = genreDao.getById(id).orElseThrow(() -> new IllegalArgumentException("Album not found"));
+
+		mapper.updateFromDto(dto, existing);
+
+		Genre persisted = genreDao.insert(existing);
+		return mapper.toResponse(persisted);
+
 	}
 
 	@Override
-	public boolean delete(Integer id) {
-		return genreDao.delete(id);
+	public void delete(Integer id) {
+
+		boolean removed = genreDao.delete(id);
+		if (!removed)
+			throw new IllegalArgumentException("Genre not found");
+
 	}
 
 }

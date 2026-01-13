@@ -1,9 +1,9 @@
 package com.muratkagan.gts.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.muratkagan.gts.entities.Genre;
@@ -20,60 +20,50 @@ public class GenreDao implements IGenreDao {
 	private EntityManager entityManager;
 
 	@Override
-	@Transactional
 	public List<Genre> getAll() {
-		Session session = entityManager.unwrap(Session.class);
 
-		return session.createQuery("SELECT g FROM Genre g", Genre.class).getResultList();
+		return entityManager.createQuery("SELECT g FROM Genre g", Genre.class).getResultList();
+
 	}
 
 	@Override
-	@Transactional
 	public Optional<Genre> getById(Integer id) {
-		Session session = entityManager.unwrap(Session.class);
 
-		return Optional.ofNullable(session.find(Genre.class, id));
+		Genre genre = entityManager.find(Genre.class, id);
+		return Optional.ofNullable(genre);
+
 	}
 
 	@Override
-	@Transactional
-	public boolean insert(Genre genre) {
-		Session session = entityManager.unwrap(Session.class);
-
-		session.persist(genre);
-		return true;
+	public List<Genre> getByIds(Collection<Integer> ids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	@Transactional
-	public boolean update(Genre genre) {
-		Session session = entityManager.unwrap(Session.class);
+	public Genre insert(Genre genre) {
 
-		Genre persistedGenre = session.find(Genre.class, genre.getId());
-		boolean doesGenreExists = (persistedGenre != null) ? true : false;
+		entityManager.persist(genre);
+		return genre;
 
-		if (!doesGenreExists) {
-			return false;
-		} else {
-			persistedGenre.setName(genre.getName());
-
-			session.merge(persistedGenre);
-			return true;
-		}
 	}
 
 	@Override
-	@Transactional
+	public Genre update(Genre genre) {
+
+		entityManager.merge(genre);
+		return genre;
+
+	}
+
+	@Override
 	public boolean delete(Integer id) {
-		Session session = entityManager.unwrap(Session.class);
 
-		Genre persistedGenre = session.find(Genre.class, id);
-		boolean doesGenreExists = (persistedGenre != null) ? true : false;
-
-		if (!doesGenreExists) {
+		Genre genre = entityManager.find(Genre.class, id);
+		if (genre == null) {
 			return false;
 		} else {
-			session.remove(persistedGenre);
+			entityManager.remove(genre);
 			return true;
 		}
 

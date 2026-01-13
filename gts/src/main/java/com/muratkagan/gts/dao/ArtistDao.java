@@ -24,9 +24,7 @@ public class ArtistDao implements IArtistDao {
 	@Override
 	public List<Artist> getAll() {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		return session.createQuery("SELECT a FROM Artist a", Artist.class).getResultList();
+		return entityManager.createQuery("SELECT a FROM Artist a", Artist.class).getResultList();
 
 	}
 

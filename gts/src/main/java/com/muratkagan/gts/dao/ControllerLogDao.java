@@ -23,9 +23,7 @@ public class ControllerLogDao implements IControllerLogDao {
 	@Transactional
 	public List<ControllerLog> getAll() {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		return session.createQuery("SELECT c FROM ControllerLog c", ControllerLog.class).getResultList();
+		return entityManager.createQuery("SELECT c FROM ControllerLog c", ControllerLog.class).getResultList();
 
 	}
 

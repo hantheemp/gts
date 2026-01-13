@@ -1,73 +1,57 @@
 package com.muratkagan.gts.controller;
 
+import java.net.URI;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.muratkagan.gts.dto.APIResponse;
-import com.muratkagan.gts.entities.Genre;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.muratkagan.gts.dto.*;
 import com.muratkagan.gts.service.GenreService;
+import com.muratkagan.gts.dto.APIResponse;
 
 @RestController
-@RequestMapping("/genre")
+@RequestMapping("/api/v1/genres")
 public class GenreController {
 
 	private final GenreService genreService;
 
-	@Autowired
 	public GenreController(GenreService genreService) {
 		this.genreService = genreService;
 	}
 
-	// GET all songs
-	@GetMapping("/getAll")
+	@GetMapping
 	public ResponseEntity<APIResponse> getAll() {
-		List<Genre> genres = genreService.getAll();
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Genres retrieved successfully", genres));
+		List<GenreListItemDto> items = genreService.getAll();
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Genres retrieved", items));
 	}
 
-	// GET song by ID
-	@GetMapping("/get/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
-		Genre genre = genreService.getById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Genre not found with id: " + id));
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Genre retrieved successfully", genre));
+		GenreResponseDto dto = genreService.getById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Genre not found"));
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Genre retrieved", dto));
 	}
 
-	// POST new song
 	@PostMapping("/insert")
-	public ResponseEntity<APIResponse> insert(@RequestBody Genre genre) {
-
-		boolean success = genreService.insert(genre);
-		if (!success) {
-			throw new RuntimeException("Failed to insert album");
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Genre created successfully", genre));
+	public ResponseEntity<APIResponse> insert(@Valid @RequestBody GenreCreateDto dto) {
+		GenreResponseDto inserted = genreService.insert(dto);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(inserted.getId())
+				.toUri();
+		APIResponse payload = new APIResponse("SUCCESS", HttpStatus.CREATED.value(), "Genre created", inserted);
+		return ResponseEntity.created(location).body(payload);
 	}
 
-	// PUT update song
-	@PutMapping("/update")
-	public ResponseEntity<APIResponse> update(@RequestBody Genre genre) {
-
-		boolean success = genreService.update(genre);
-		if (!success) {
-			throw new RuntimeException("Failed to update album with id: " + genre.getId());
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Genre updated successfully", genre));
+	@PutMapping("/update/{id}")
+	public ResponseEntity<APIResponse> update(@PathVariable Integer id, @Valid @RequestBody GenreUpdateDto dto) {
+		GenreResponseDto updated = genreService.update(dto, id);
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Genre updated", updated));
 	}
 
-	// DELETE song by ID
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
-		boolean success = genreService.delete(id);
-		if (!success) {
-			throw new IllegalArgumentException("Genre not found with id: " + id);
-		}
-
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Genre deleted successfully"));
+		genreService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

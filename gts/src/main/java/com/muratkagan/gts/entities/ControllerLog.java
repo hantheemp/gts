@@ -29,12 +29,12 @@ public class ControllerLog {
 
 	@Column(name = "status_code")
 	private Integer statusCode;
-	
+
 	@Column(name = "client_ip")
 	private String clientIp;
 
 	@CreationTimestamp
-	@Column(insertable = false, updatable = false)
+	@Column(updatable = false)
 	private OffsetDateTime executedAt;
 
 	// Getters and setters
