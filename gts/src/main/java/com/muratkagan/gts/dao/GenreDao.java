@@ -36,8 +36,12 @@ public class GenreDao implements IGenreDao {
 
 	@Override
 	public List<Genre> getByIds(Collection<Integer> ids) {
-		// TODO Auto-generated method stub
-		return null;
+		if (ids == null || ids.isEmpty()) {
+			return List.of();
+		}
+		return entityManager.createQuery("SELECT g FROM Genre g WHERE g.id IN :ids", Genre.class)
+				.setParameter("ids", ids).getResultList();
+
 	}
 
 	@Override

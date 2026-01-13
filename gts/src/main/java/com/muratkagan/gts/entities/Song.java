@@ -2,6 +2,8 @@ package com.muratkagan.gts.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -42,6 +44,14 @@ public class Song {
 	@UpdateTimestamp
 	@Column(name = "updated_at")
 	private OffsetDateTime updatedAt;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "song_genres",
+        joinColumns = @JoinColumn(name = "song_id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+	private Set<Genre> genres = new HashSet<>();
 
 	// Getters and setters
 
@@ -115,5 +125,13 @@ public class Song {
 
 	public void setUpdatedAt(OffsetDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Set<Genre> getGenres() {
+		return genres;
+	}
+
+	public void setGenres(Set<Genre> genres) {
+		this.genres = genres;
 	}
 }

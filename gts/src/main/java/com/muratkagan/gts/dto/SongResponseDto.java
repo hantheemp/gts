@@ -2,6 +2,7 @@ package com.muratkagan.gts.dto;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public class SongResponseDto {
 
@@ -20,6 +21,8 @@ public class SongResponseDto {
 	private Integer durationSeconds;
 
 	private String languageCode;
+	
+	private List<String> genres;
 
 	// AUDIT FIELDS START
 
@@ -90,6 +93,14 @@ public class SongResponseDto {
 
 	public void setLanguageCode(String languageCode) {
 		this.languageCode = languageCode;
+	}
+
+	public List<String> getGenres() {
+		return genres;
+	}
+
+	public void setGenres(List<String> genres) {
+		this.genres = genres;
 	}
 
 	public OffsetDateTime getCreatedAt() {

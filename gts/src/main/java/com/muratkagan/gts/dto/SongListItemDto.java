@@ -1,6 +1,7 @@
 package com.muratkagan.gts.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class SongListItemDto {
 
@@ -19,6 +20,8 @@ public class SongListItemDto {
 	private Integer durationSeconds;
 
 	private String languageCode;
+
+	private List<String> genres;
 
 	// Getters and setters
 
@@ -84,6 +87,14 @@ public class SongListItemDto {
 
 	public void setLanguageCode(String languageCode) {
 		this.languageCode = languageCode;
+	}
+
+	public List<String> getGenres() {
+		return genres;
+	}
+
+	public void setGenres(List<String> genres) {
+		this.genres = genres;
 	}
 
 }

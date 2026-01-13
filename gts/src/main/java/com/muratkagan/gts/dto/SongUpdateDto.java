@@ -1,6 +1,8 @@
 package com.muratkagan.gts.dto;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +30,8 @@ public class SongUpdateDto {
 
 	@Size(max = 3, message = "Language code must be short (e.g., 'en', 'tr')")
 	private String languageCode;
+
+	private List<Integer> genreIds;
 
 	// Getters and setters
 
@@ -85,6 +89,14 @@ public class SongUpdateDto {
 
 	public void setLanguageCode(String languageCode) {
 		this.languageCode = languageCode;
+	}
+
+	public List<Integer> getGenreIds() {
+		return genreIds;
+	}
+
+	public void setGenreIds(List<Integer> genreIds) {
+		this.genreIds = genreIds;
 	}
 
 }

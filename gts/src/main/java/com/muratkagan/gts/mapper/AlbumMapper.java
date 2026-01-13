@@ -14,5 +14,5 @@ public interface AlbumMapper {
 	Album toEntity(AlbumCreateDto dto);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	void updateFromDto(AlbumUpdateDto dto, @MappingTarget Album entity);
+	void updateFromDto(AlbumUpdateDto dto, @MappingTarget Album album);
 }
