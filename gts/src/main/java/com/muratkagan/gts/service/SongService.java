@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.muratkagan.gts.dao.ArtistDao;
 import com.muratkagan.gts.dao.GenreDao;
+import com.muratkagan.gts.dao.InstrumentationDao;
 import com.muratkagan.gts.dao.SongDao;
 import com.muratkagan.gts.dto.SongCreateDto;
 import com.muratkagan.gts.dto.SongListItemDto;
@@ -17,6 +18,7 @@ import com.muratkagan.gts.dto.SongResponseDto;
 import com.muratkagan.gts.dto.SongUpdateDto;
 import com.muratkagan.gts.entities.Artist;
 import com.muratkagan.gts.entities.Genre;
+import com.muratkagan.gts.entities.Instrumentation;
 import com.muratkagan.gts.entities.Song;
 import com.muratkagan.gts.mapper.SongMapper;
 
@@ -29,13 +31,16 @@ public class SongService implements ISongService {
 	private final SongDao songDao;
 	private final ArtistDao artistDao;
 	private final GenreDao genreDao;
+	private final InstrumentationDao instrumentationDao;
 	private final SongMapper songMapper;
 
 	@Autowired
-	public SongService(SongDao songDao, ArtistDao artistDao, GenreDao genreDao, SongMapper songMapper) {
+	public SongService(SongDao songDao, ArtistDao artistDao, GenreDao genreDao, InstrumentationDao instrumentationDao,
+			SongMapper songMapper) {
 		this.songDao = songDao;
 		this.artistDao = artistDao;
 		this.genreDao = genreDao;
+		this.instrumentationDao = instrumentationDao;
 		this.songMapper = songMapper;
 	}
 
@@ -74,6 +79,14 @@ public class SongService implements ISongService {
 			}
 			song.setGenres(new HashSet<>(genres));
 		}
+		
+		if (dto.getInstrumentationIds() != null && !dto.getInstrumentationIds().isEmpty()) {
+			List<Instrumentation> instrumentations = instrumentationDao.getByIds(dto.getInstrumentationIds());
+			if (instrumentations.size() != dto.getInstrumentationIds().size()) {
+				throw new IllegalArgumentException("One or more instrumentations not found");
+			}
+			song.setInstrumentations(new HashSet<>(instrumentations));
+		}
 
 		Song persisted = songDao.insert(song);
 		return songMapper.toResponse(persisted);
@@ -88,15 +101,22 @@ public class SongService implements ISongService {
 
 		songMapper.updateFromDto(dto, existing);
 		existing.setArtistId(artist.getId());
-		
-		if (dto.getGenreIds() != null) {
-	        List<Genre> genres = genreDao.getByIds(dto.getGenreIds());
-	        if (genres.size() != dto.getGenreIds().size()) {
-	            throw new IllegalArgumentException("One or more genres not found");
-	        }
-	        existing.setGenres(new HashSet<>(genres));
-	    }
 
+		if (dto.getGenreIds() != null) {
+			List<Genre> genres = genreDao.getByIds(dto.getGenreIds());
+			if (genres.size() != dto.getGenreIds().size()) {
+				throw new IllegalArgumentException("One or more genres not found");
+			}
+			existing.setGenres(new HashSet<>(genres));
+		}
+
+		if (dto.getInstrumentationIds() != null) {
+			List<Instrumentation> instrumentations = instrumentationDao.getByIds(dto.getInstrumentationIds());
+			if (instrumentations.size() != dto.getInstrumentationIds().size()) {
+				throw new IllegalArgumentException("One or more instrumentations not found");
+			}
+			existing.setInstrumentations(new HashSet<>(instrumentations));
+		}
 
 		Song updated = songDao.update(existing);
 

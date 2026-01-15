@@ -33,6 +33,8 @@ public class SongCreateDto {
 
 	private List<Integer> genreIds;
 
+	private List<Integer> instrumentationIds;
+
 	// Getters and setters
 
 	public Integer getArtistId() {
@@ -97,6 +99,14 @@ public class SongCreateDto {
 
 	public void setGenreIds(List<Integer> genreIds) {
 		this.genreIds = genreIds;
+	}
+
+	public List<Integer> getInstrumentationIds() {
+		return instrumentationIds;
+	}
+
+	public void setInstrumentationIds(List<Integer> instrumentationIds) {
+		this.instrumentationIds = instrumentationIds;
 	}
 
 }

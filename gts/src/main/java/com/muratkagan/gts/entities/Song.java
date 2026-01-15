@@ -46,12 +46,12 @@ public class Song {
 	private OffsetDateTime updatedAt;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "song_genres",
-        joinColumns = @JoinColumn(name = "song_id"),
-        inverseJoinColumns = @JoinColumn(name = "genre_id")
-    )
+	@JoinTable(name = "song_genres", joinColumns = @JoinColumn(name = "song_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private Set<Genre> genres = new HashSet<>();
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "song_instrumentations", joinColumns = @JoinColumn(name = "song_id"), inverseJoinColumns = @JoinColumn(name = "instrumentation_id"))
+	private Set<Instrumentation> instrumentations = new HashSet<>();
 
 	// Getters and setters
 
@@ -133,5 +133,13 @@ public class Song {
 
 	public void setGenres(Set<Genre> genres) {
 		this.genres = genres;
+	}
+
+	public Set<Instrumentation> getInstrumentations() {
+		return instrumentations;
+	}
+
+	public void setInstrumentations(Set<Instrumentation> instrumentations) {
+		this.instrumentations = instrumentations;
 	}
 }

@@ -7,7 +7,6 @@ import com.muratkagan.gts.dto.GenreCreateDto;
 import com.muratkagan.gts.dto.GenreListItemDto;
 import com.muratkagan.gts.dto.GenreResponseDto;
 import com.muratkagan.gts.dto.GenreUpdateDto;
-import com.muratkagan.gts.entities.Genre;
 
 public interface IGenreService {
 

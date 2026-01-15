@@ -21,8 +21,10 @@ public class SongResponseDto {
 	private Integer durationSeconds;
 
 	private String languageCode;
-	
+
 	private List<String> genres;
+
+	private List<String> instrumentations;
 
 	// AUDIT FIELDS START
 
@@ -117,6 +119,14 @@ public class SongResponseDto {
 
 	public void setUpdatedAt(OffsetDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<String> getInstrumentations() {
+		return instrumentations;
+	}
+
+	public void setInstrumentations(List<String> instrumentations) {
+		this.instrumentations = instrumentations;
 	}
 
 }

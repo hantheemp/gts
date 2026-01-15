@@ -50,7 +50,7 @@ public class GenreService implements IGenreService {
 	@Override
 	public GenreResponseDto update(GenreUpdateDto dto, Integer id) {
 
-		Genre existing = genreDao.getById(id).orElseThrow(() -> new IllegalArgumentException("Album not found"));
+		Genre existing = genreDao.getById(id).orElseThrow(() -> new IllegalArgumentException("Genre not found"));
 
 		mapper.updateFromDto(dto, existing);
 
