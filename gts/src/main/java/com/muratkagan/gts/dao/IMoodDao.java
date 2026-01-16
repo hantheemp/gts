@@ -12,7 +12,7 @@ public interface IMoodDao {
 
     Optional<Mood> getById(Integer id);
 
-    public List<Mood> getByIds(Collection<Integer> ids);
+    List<Mood> getByIds(Collection<Integer> ids);
 
     Mood insert(Mood mood);
 

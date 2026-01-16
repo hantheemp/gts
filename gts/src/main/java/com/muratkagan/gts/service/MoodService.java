@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import com.muratkagan.gts.dao.MoodDao;
 import com.muratkagan.gts.entities.Mood;
 
-import javax.swing.text.html.Option;
-
 @Service
 public class MoodService implements IMoodService {
 
