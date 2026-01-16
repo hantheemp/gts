@@ -12,17 +12,17 @@ import com.muratkagan.gts.dto.SongResponseDto;
 import com.muratkagan.gts.dto.SongUpdateDto;
 import com.muratkagan.gts.entities.Genre;
 import com.muratkagan.gts.entities.Instrumentation;
+import com.muratkagan.gts.entities.Mood;
 import com.muratkagan.gts.entities.Song;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SongMapper {
 
-	@Mappings({
-	    @Mapping(target = "genres", source = "genres"),
-	    @Mapping(target = "instrumentations", source = "instrumentations")
-	})
+	@Mappings({ @Mapping(target = "genres", source = "genres"),
+			@Mapping(target = "instrumentations", source = "instrumentations"),
+			@Mapping(target = "moods", source = "moods") })
 	SongResponseDto toResponse(Song song);
-	
+
 	SongListItemDto toListItem(Song song);
 
 	Song toEntity(SongCreateDto dto);
@@ -42,4 +42,12 @@ public interface SongMapper {
 			return null;
 		return instrumentations.stream().map(Instrumentation::getName).collect(Collectors.toList());
 	}
+
+	default List<String> mapMoods(Set<Mood> moods) {
+		if (moods == null) {
+			return null;
+		}
+		return moods.stream().map(Mood::getName).collect(Collectors.toList());
+	}
+
 }
