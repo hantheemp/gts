@@ -55,7 +55,7 @@ public class InstrumentationService implements IInstrumentationService {
 
 		mapper.updateFromDto(dto, existing);
 
-		Instrumentation persisted = instrumentationDao.insert(existing);
+		Instrumentation persisted = instrumentationDao.update(existing);
 		return mapper.toResponse(persisted);
 
 	}

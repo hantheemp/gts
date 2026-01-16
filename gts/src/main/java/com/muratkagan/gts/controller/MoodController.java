@@ -1,70 +1,61 @@
 package com.muratkagan.gts.controller;
 
+import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.muratkagan.gts.service.MoodService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.muratkagan.gts.dto.*;
 import com.muratkagan.gts.dto.APIResponse;
-import com.muratkagan.gts.entities.Mood;
-import com.muratkagan.gts.service.MoodService;
 
 @RestController
-@RequestMapping("/mood")
+@RequestMapping("/api/v1/moods")
 public class MoodController {
 
 	private final MoodService moodService;
 
-	@Autowired
 	public MoodController(MoodService moodService) {
-		this.moodService = moodService;
+		this. moodService =  moodService;
 	}
 
-	// GET all moods
-	@GetMapping("/getAll")
+	@GetMapping
 	public ResponseEntity<APIResponse> getAll() {
-		List<Mood> moods = moodService.getAll();
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Moods retrieved successfully", moods));
+		List<MoodListItemDto> items =  moodService.getAll();
+		return ResponseEntity
+				.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Moods retrieved", items));
 	}
 
-	// GET mood by ID
-	@GetMapping("/get/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
-		Mood mood = moodService.getById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Mood not found with id: " + id));
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Mood retrieved successfully", mood));
+		MoodResponseDto dto =  moodService.getById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Mood not found"));
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Mood retrieved", dto));
 	}
 
-	// POST new mood
 	@PostMapping("/insert")
-	public ResponseEntity<APIResponse> insert(@RequestBody Mood mood) {
-		if (mood.getId() == null) {
-			throw new IllegalArgumentException("Mood ID must not be empty");
-		}
-		boolean success = moodService.insert(mood);
-		if (!success) {
-			throw new RuntimeException("Failed to insert mood");
-		}
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Mood created successfully", mood));
+	public ResponseEntity<APIResponse> insert(@Valid @RequestBody MoodCreateDto dto) {
+		MoodResponseDto inserted = moodService.insert(dto);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(inserted.getId())
+				.toUri();
+		APIResponse payload = new APIResponse("SUCCESS", HttpStatus.CREATED.value(), "Mood created",
+				inserted);
+		return ResponseEntity.created(location).body(payload);
 	}
 
-	// PUT update mood
-	@PutMapping("/update")
-	public ResponseEntity<APIResponse> update(@RequestBody Mood mood) {
-		boolean success = moodService.update(mood);
-		if (!success) {
-			throw new IllegalArgumentException("Failed to update mood with id: " + mood.getId());
-		}
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Mood updated successfully", mood));
+	@PutMapping("/update/{id}")
+	public ResponseEntity<APIResponse> update(@PathVariable Integer id,
+											  @Valid @RequestBody MoodUpdateDto dto) {
+		MoodResponseDto updated =  moodService.update(dto, id);
+		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Mood updated", updated));
 	}
 
-	// DELETE mood by ID
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
-		boolean success = moodService.delete(id);
-		if (!success) {
-			throw new IllegalArgumentException("Mood not found with id: " + id);
-		}
-		return ResponseEntity.ok(new APIResponse("SUCCESS", 200, "Mood deleted successfully"));
+		moodService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

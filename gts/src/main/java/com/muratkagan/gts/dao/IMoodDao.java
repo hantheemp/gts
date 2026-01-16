@@ -1,5 +1,6 @@
 package com.muratkagan.gts.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,10 +11,13 @@ public interface IMoodDao {
     List<Mood> getAll();
 
     Optional<Mood> getById(Integer id);
-    
-    boolean insert(Mood mood);
 
-    boolean update(Mood mood);
+    public List<Mood> getByIds(Collection<Integer> ids);
+
+    Mood insert(Mood mood);
+
+    Mood update(Mood mood);
 
     boolean delete(Integer id);
+
 }

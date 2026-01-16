@@ -5,21 +5,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.muratkagan.gts.dao.*;
+import com.muratkagan.gts.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.muratkagan.gts.dao.ArtistDao;
-import com.muratkagan.gts.dao.GenreDao;
-import com.muratkagan.gts.dao.InstrumentationDao;
-import com.muratkagan.gts.dao.SongDao;
 import com.muratkagan.gts.dto.SongCreateDto;
 import com.muratkagan.gts.dto.SongListItemDto;
 import com.muratkagan.gts.dto.SongResponseDto;
 import com.muratkagan.gts.dto.SongUpdateDto;
-import com.muratkagan.gts.entities.Artist;
-import com.muratkagan.gts.entities.Genre;
-import com.muratkagan.gts.entities.Instrumentation;
-import com.muratkagan.gts.entities.Song;
 import com.muratkagan.gts.mapper.SongMapper;
 
 import jakarta.transaction.Transactional;
@@ -32,15 +26,18 @@ public class SongService implements ISongService {
 	private final ArtistDao artistDao;
 	private final GenreDao genreDao;
 	private final InstrumentationDao instrumentationDao;
+	private final MoodDao moodDao;
 	private final SongMapper songMapper;
 
 	@Autowired
 	public SongService(SongDao songDao, ArtistDao artistDao, GenreDao genreDao, InstrumentationDao instrumentationDao,
+			MoodDao moodDao,
 			SongMapper songMapper) {
 		this.songDao = songDao;
 		this.artistDao = artistDao;
 		this.genreDao = genreDao;
 		this.instrumentationDao = instrumentationDao;
+		this.moodDao = moodDao;
 		this.songMapper = songMapper;
 	}
 
@@ -88,6 +85,14 @@ public class SongService implements ISongService {
 			song.setInstrumentations(new HashSet<>(instrumentations));
 		}
 
+		if (dto.getMoodIds() != null && !dto.getMoodIds().isEmpty()){
+			List<Mood> moods = moodDao.getByIds(dto.getMoodIds());
+			if (moods.size() != dto.getMoodIds().size()){
+				throw new IllegalArgumentException("One or more moods not found");
+			}
+			song.setMoods(new HashSet<>(moods));
+		}
+
 		Song persisted = songDao.insert(song);
 		return songMapper.toResponse(persisted);
 	}
@@ -116,6 +121,14 @@ public class SongService implements ISongService {
 				throw new IllegalArgumentException("One or more instrumentations not found");
 			}
 			existing.setInstrumentations(new HashSet<>(instrumentations));
+		}
+
+		if (dto.getMoodIds() != null && !dto.getMoodIds().isEmpty()){
+			List<Mood> moods = moodDao.getByIds(dto.getMoodIds());
+			if (moods.size() != dto.getMoodIds().size()){
+				throw new IllegalArgumentException("One or more moods not found");
+			}
+			existing.setMoods(new HashSet<>(moods));
 		}
 
 		Song updated = songDao.update(existing);

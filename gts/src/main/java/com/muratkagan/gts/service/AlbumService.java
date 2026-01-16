@@ -68,7 +68,7 @@ public class AlbumService implements IAlbumService {
 		mapper.updateFromDto(dto, existing);
 		existing.setArtistId(artist.getId());
 
-		Album persisted = albumDao.insert(existing);
+		Album persisted = albumDao.update(existing);
 		return mapper.toResponse(persisted);
 
 	}

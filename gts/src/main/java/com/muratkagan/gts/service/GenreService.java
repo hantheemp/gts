@@ -54,7 +54,7 @@ public class GenreService implements IGenreService {
 
 		mapper.updateFromDto(dto, existing);
 
-		Genre persisted = genreDao.insert(existing);
+		Genre persisted = genreDao.update(existing);
 		return mapper.toResponse(persisted);
 
 	}

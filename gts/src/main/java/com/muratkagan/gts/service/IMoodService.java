@@ -3,18 +3,18 @@ package com.muratkagan.gts.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.muratkagan.gts.entities.Mood;
+import com.muratkagan.gts.dto.*;
 
 public interface IMoodService {
 
-	List<Mood> getAll();
+	List<MoodListItemDto> getAll();
 
-	Optional<Mood> getById(Integer id);
+	Optional<MoodResponseDto> getById(Integer id);
 
-	boolean insert(Mood mood);
+	MoodResponseDto insert(MoodCreateDto dto);
 
-	boolean update(Mood mood);
+	MoodResponseDto update(MoodUpdateDto dto, Integer id);
 
-	boolean delete(Integer id);
+	void delete(Integer id);
 
 }

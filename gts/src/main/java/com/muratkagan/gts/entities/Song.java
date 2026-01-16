@@ -53,6 +53,10 @@ public class Song {
 	@JoinTable(name = "song_instrumentations", joinColumns = @JoinColumn(name = "song_id"), inverseJoinColumns = @JoinColumn(name = "instrumentation_id"))
 	private Set<Instrumentation> instrumentations = new HashSet<>();
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "song_moods", joinColumns = @JoinColumn(name = "song_id"), inverseJoinColumns = @JoinColumn(name = "mood_id"))
+	private Set<Mood> moods = new HashSet<>();
+
 	// Getters and setters
 
 	public Integer getId() {
@@ -141,5 +145,13 @@ public class Song {
 
 	public void setInstrumentations(Set<Instrumentation> instrumentations) {
 		this.instrumentations = instrumentations;
+	}
+
+	public Set<Mood> getMoods() {
+		return moods;
+	}
+
+	public void setMoods(Set<Mood> moods) {
+		this.moods = moods;
 	}
 }

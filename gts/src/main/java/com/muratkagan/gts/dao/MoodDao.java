@@ -1,9 +1,9 @@
 package com.muratkagan.gts.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.muratkagan.gts.entities.Mood;
@@ -20,75 +20,50 @@ public class MoodDao implements IMoodDao {
 	private EntityManager entityManager;
 
 	@Override
-	@Transactional
 	public List<Mood> getAll() {
-
-		Session session = entityManager.unwrap(Session.class);
-
-		return session.createQuery("SELECT m FROM Mood m", Mood.class).getResultList();
-
+		return entityManager.createQuery("SELECT m FROM Mood m", Mood.class).getResultList();
 	}
 
 	@Override
-	@Transactional
 	public Optional<Mood> getById(Integer id) {
-
-		Session session = entityManager.unwrap(Session.class);
-
-		Mood result = session.find(Mood.class, id);
-		return Optional.ofNullable(result);
-
+		Mood mood = entityManager.find(Mood.class, id);
+		return Optional.ofNullable(mood);
 	}
 
 	@Override
-	@Transactional
-	public boolean insert(Mood mood) {
-
-		Session session = entityManager.unwrap(Session.class);
-
-		session.persist(mood);
-		return true;
-
-	}
-
-	@Override
-	@Transactional
-	public boolean update(Mood mood) {
-
-		Session session = entityManager.unwrap(Session.class);
-
-		Mood persistedMood = session.find(Mood.class, mood.getId());
-		boolean doesMoodExists = (persistedMood != null) ? true : false;
-
-		if (!doesMoodExists) {
-			return false;
-		} else {
-
-			persistedMood.setId(mood.getId());
-			persistedMood.setName(mood.getName());
-
-			session.merge(persistedMood);
-			return true;
+	public List<Mood> getByIds(Collection<Integer> ids) {
+		if (ids == null || ids.isEmpty()){
+			return List.of();
 		}
+		return entityManager.createQuery("SELECT m FROM Mood m WHERE m.id IN ids", Mood.class).setParameter("ids", ids).getResultList();
+	}
+
+	@Override
+	public Mood insert(Mood mood) {
+
+		entityManager.persist(mood);
+		return mood;
+	}
+
+	@Override
+	public Mood update(Mood mood) {
+
+		entityManager.merge(mood);
+		return mood;
 
 	}
 
 	@Override
-	@Transactional
 	public boolean delete(Integer id) {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		Mood persistedMood = session.find(Mood.class, id);
-		boolean doesMoodExists = (persistedMood != null) ? true : false;
-
-		if (!doesMoodExists) {
+		Mood mood = entityManager.find(Mood.class, id);
+		if (mood == null){
 			return false;
-		} else {
-			session.remove(doesMoodExists);
+		}
+		else {
+			entityManager.remove(mood);
 			return true;
 		}
 
 	}
-
 }

@@ -25,6 +25,8 @@ public class SongListItemDto {
 
 	private List<String> instrumentations;
 
+	private List<String> moods;
+
 	// Getters and setters
 
 	public Integer getId() {
@@ -107,4 +109,11 @@ public class SongListItemDto {
 		this.instrumentations = instrumentations;
 	}
 
+	public List<String> getMoods() {
+		return moods;
+	}
+
+	public void setMoods(List<String> moods) {
+		this.moods = moods;
+	}
 }

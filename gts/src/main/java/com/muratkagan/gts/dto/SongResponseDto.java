@@ -26,6 +26,8 @@ public class SongResponseDto {
 
 	private List<String> instrumentations;
 
+	private List<String> moods;
+
 	// AUDIT FIELDS START
 
 	private OffsetDateTime createdAt;
@@ -129,4 +131,11 @@ public class SongResponseDto {
 		this.instrumentations = instrumentations;
 	}
 
+	public List<String> getMoods() {
+		return moods;
+	}
+
+	public void setMoods(List<String> moods) {
+		this.moods = moods;
+	}
 }

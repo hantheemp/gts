@@ -1,11 +1,9 @@
 package com.muratkagan.gts.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "moods")
@@ -18,6 +16,9 @@ public class Mood {
 
 	@Column(name = "name")
 	private String name;
+
+	@ManyToMany(mappedBy = "moods", fetch = FetchType.LAZY)
+	private Set<Song> songs = new HashSet<>();
 
 	// Getters and setters
 
@@ -37,4 +38,11 @@ public class Mood {
 		this.name = name;
 	}
 
+	public Set<Song> getSongs() {
+		return songs;
+	}
+
+	public void setSongs(Set<Song> songs) {
+		this.songs = songs;
+	}
 }
