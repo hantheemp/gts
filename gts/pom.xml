@@ -13,7 +13,7 @@
 
 	<groupId>com.muratkagan</groupId>
 	<artifactId>gts</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.30-SNAPSHOT</version>
 	<name>gts</name>
 	<description>Guess the Song RESTful Backend</description>
 

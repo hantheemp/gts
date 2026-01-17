@@ -1,9 +1,9 @@
 package com.muratkagan.gts.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.muratkagan.gts.entities.ControllerLog;
@@ -20,7 +20,6 @@ public class ControllerLogDao implements IControllerLogDao {
 	private EntityManager entityManager;
 
 	@Override
-	@Transactional
 	public List<ControllerLog> getAll() {
 
 		return entityManager.createQuery("SELECT c FROM ControllerLog c", ControllerLog.class).getResultList();
@@ -28,82 +27,50 @@ public class ControllerLogDao implements IControllerLogDao {
 	}
 
 	@Override
-	@Transactional
-	public Optional<ControllerLog> getById(Long id) {
+	public Optional<ControllerLog> getById(Integer id) {
 
-		Session session = entityManager.unwrap(Session.class);
-
-		ControllerLog controllerLog = session.find(ControllerLog.class, id);
-
+		ControllerLog controllerLog = entityManager.find(ControllerLog.class, id);
 		return Optional.ofNullable(controllerLog);
 
 	}
 
 	@Override
-	@Transactional
-	public Optional<ControllerLog> getByEndpoint(String endpoint) {
+	public List<ControllerLog> getByIds(Collection<Integer> ids) {
 
-		Session session = entityManager.unwrap(Session.class);
+		if (ids == null || ids.isEmpty()) {
+			return List.of();
+		}
 
-		ControllerLog controllerLog = session.find(ControllerLog.class, endpoint);
-
-		return Optional.ofNullable(controllerLog);
+		return entityManager.createQuery("SELECT c FROM ControllerLog c WHERE c.id IN :ids", ControllerLog.class)
+				.setParameter("ids", ids).getResultList();
 
 	}
 
 	@Override
-	@Transactional
-	public boolean insert(ControllerLog controllerLog) {
+	public ControllerLog insert(ControllerLog controllerLog) {
 
-		Session session = entityManager.unwrap(Session.class);
+		entityManager.persist(controllerLog);
+		return controllerLog;
 
-		session.persist(controllerLog);
+	}
+
+	@Override
+	public ControllerLog update(ControllerLog controllerLog) {
+
+		return entityManager.merge(controllerLog);
+
+	}
+
+	@Override
+	public boolean delete(Integer id) {
+
+		ControllerLog persisted = entityManager.find(ControllerLog.class, id);
+
+		if (persisted == null) {
+			return false;
+		}
+		entityManager.remove(persisted);
 		return true;
-
-	}
-
-	@Override
-	@Transactional
-	public boolean update(ControllerLog controllerLog) {
-
-		Session session = entityManager.unwrap(Session.class);
-
-		ControllerLog persistedControllerLog = session.find(ControllerLog.class, controllerLog.getId());
-		boolean doesControllerLogExists = (persistedControllerLog != null) ? true : false;
-
-		if (!doesControllerLogExists) {
-			return false;
-		} else {
-
-			persistedControllerLog.setClientIp(controllerLog.getClientIp());
-			persistedControllerLog.setEndpoint(controllerLog.getEndpoint());
-			persistedControllerLog.setHttpMethod(controllerLog.getHttpMethod());
-			persistedControllerLog.setId(controllerLog.getId());
-			persistedControllerLog.setRequestPayload(controllerLog.getRequestPayload());
-			persistedControllerLog.setResponsePayload(controllerLog.getResponsePayload());
-			persistedControllerLog.setStatusCode(controllerLog.getStatusCode());
-
-			session.merge(persistedControllerLog);
-			return true;
-		}
-
-	}
-
-	@Override
-	@Transactional
-	public boolean delete(Long id) {
-
-		Session session = entityManager.unwrap(Session.class);
-
-		ControllerLog persistedControllerLog = session.find(ControllerLog.class, id);
-		boolean doesControllerLogExists = (persistedControllerLog != null) ? true : false;
-
-		if (!doesControllerLogExists) {
-			return false;
-		} else {
-			session.remove(persistedControllerLog);
-			return true;
-		}
 
 	}
 

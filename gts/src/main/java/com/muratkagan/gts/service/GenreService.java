@@ -15,7 +15,10 @@ import com.muratkagan.gts.dto.GenreUpdateDto;
 import com.muratkagan.gts.entities.Genre;
 import com.muratkagan.gts.mapper.GenreMapper;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class GenreService implements IGenreService {
 
 	private final GenreDao genreDao;

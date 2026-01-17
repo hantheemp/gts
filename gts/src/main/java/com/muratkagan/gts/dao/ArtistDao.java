@@ -38,7 +38,7 @@ public class ArtistDao implements IArtistDao {
 		if (ids == null || ids.isEmpty()) {
 			return List.of();
 		}
-		return entityManager.createQuery("SELECT a FROM Genre a WHERE a.id IN :ids", Artist.class)
+		return entityManager.createQuery("SELECT a FROM Artist a WHERE a.id IN :ids", Artist.class)
 				.setParameter("ids", ids).getResultList();
 	}
 
