@@ -4,6 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import com.muratkagan.gts.service.MoodService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +15,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.muratkagan.gts.dto.*;
 
 @RestController
-@RequestMapping("/api/v1/moods")
+@RequestMapping(value = "/api/v1/moods", produces = "application/json")
+@Tag(name = "Moods", description = "Mood management APIs")
 public class MoodController {
 
 	private final MoodService moodService;
@@ -22,18 +26,21 @@ public class MoodController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Get all moods", description = "Retrieves all moods persisted to Postgre.")
 	public ResponseEntity<APIResponse> getAll() {
 		List<MoodListItemDto> items = moodService.getAll();
 		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Moods retrieved", items));
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Get mood by ID", description = "Retrieves a mood by its ID.")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
 		MoodResponseDto dto = moodService.getById(id).orElseThrow(() -> new IllegalArgumentException("Mood not found"));
 		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Mood retrieved", dto));
 	}
 
 	@PostMapping("/insert")
+	@Operation(summary = "Insert a new mood", description = "Creates a new mood entry.")
 	public ResponseEntity<APIResponse> insert(@Valid @RequestBody MoodCreateDto dto) {
 		MoodResponseDto inserted = moodService.insert(dto);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(inserted.getId())
@@ -43,12 +50,14 @@ public class MoodController {
 	}
 
 	@PutMapping("/update/{id}")
+	@Operation(summary = "Update a mood", description = "Updates an existing mood entry.")
 	public ResponseEntity<APIResponse> update(@PathVariable Integer id, @Valid @RequestBody MoodUpdateDto dto) {
 		MoodResponseDto updated = moodService.update(dto, id);
 		return ResponseEntity.ok(new APIResponse("SUCCESS", HttpStatus.OK.value(), "Mood updated", updated));
 	}
 
 	@DeleteMapping("/delete/{id}")
+	@Operation(summary = "Delete a mood", description = "Deletes a mood by its ID.")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
 		moodService.delete(id);
 		return ResponseEntity.noContent().build();

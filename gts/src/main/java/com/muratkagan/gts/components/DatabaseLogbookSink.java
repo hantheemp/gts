@@ -28,6 +28,13 @@ public class DatabaseLogbookSink implements Sink {
 
 	@Override
 	public void write(Correlation correlation, HttpRequest request, HttpResponse response) throws IOException {
+
+		String path = request.getPath();
+
+		if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.startsWith("/api-docs")) {
+			return;
+		}
+
 		ControllerLogCreateDto dto = new ControllerLogCreateDto();
 
 		dto.setEndpoint(request.getPath());

@@ -11,8 +11,12 @@ import com.muratkagan.gts.dto.*;
 import com.muratkagan.gts.dto.APIResponse;
 import com.muratkagan.gts.service.InstrumentationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
-@RequestMapping("/api/v1/instrumentations")
+@RequestMapping(value = "/api/v1/instrumentations", produces = "application/json")
+@Tag(name = "Instrumentations", description = "Instrumentation management APIs")
 public class InstrumentationController {
 
 	private final InstrumentationService instrumentationService;
@@ -22,6 +26,7 @@ public class InstrumentationController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Get all instrumentations", description = "Retrieves all instrumentations persisted to Postgre.")
 	public ResponseEntity<APIResponse> getAll() {
 		List<InstrumentationListItemDto> items = instrumentationService.getAll();
 		return ResponseEntity
@@ -29,6 +34,7 @@ public class InstrumentationController {
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Get instrumentation by ID", description = "Retrieves an instrumentation by its ID.")
 	public ResponseEntity<APIResponse> get(@PathVariable Integer id) {
 		InstrumentationResponseDto dto = instrumentationService.getById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Instrumentation not found"));
@@ -36,6 +42,7 @@ public class InstrumentationController {
 	}
 
 	@PostMapping("/insert")
+	@Operation(summary = "Insert a new instrumentation", description = "Creates a new instrumentation entry.")
 	public ResponseEntity<APIResponse> insert(@Valid @RequestBody InstrumentationCreateDto dto) {
 		InstrumentationResponseDto inserted = instrumentationService.insert(dto);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(inserted.getId())
@@ -46,6 +53,7 @@ public class InstrumentationController {
 	}
 
 	@PutMapping("/update/{id}")
+	@Operation(summary = "Update an instrumentation", description = "Updates an existing instrumentation entry.")
 	public ResponseEntity<APIResponse> update(@PathVariable Integer id,
 			@Valid @RequestBody InstrumentationUpdateDto dto) {
 		InstrumentationResponseDto updated = instrumentationService.update(dto, id);
@@ -53,6 +61,7 @@ public class InstrumentationController {
 	}
 
 	@DeleteMapping("/delete/{id}")
+	@Operation(summary = "Delete an instrumentation", description = "Deletes an instrumentation by its ID.")
 	public ResponseEntity<APIResponse> delete(@PathVariable Integer id) {
 		instrumentationService.delete(id);
 		return ResponseEntity.noContent().build();
