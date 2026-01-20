@@ -12,9 +12,10 @@ public class AlbumCreateDto {
 	@Size(max = 200, message = "Title must be at most 200 characters")
 	private String title;
 
-	@Size(max = 500, message = "Cover art URL must be at most 500 characters")
+	@NotNull(message = "Release date is required")
 	private LocalDate releaseDate;
 
+	@Size(max = 500, message = "Cover art URL must be at most 500 characters")
 	private String coverArtUrl;
 
 	// Getters and setters

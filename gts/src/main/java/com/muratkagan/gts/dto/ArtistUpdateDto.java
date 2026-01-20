@@ -11,6 +11,7 @@ public class ArtistUpdateDto {
     @Size(max = 100, message = "Name must be at most 100 characters")
     private String name;
 
+	@NotBlank(message = "Surname is required")
     @Size(max = 100, message = "Surname must be at most 100 characters")
     private String surname;
 

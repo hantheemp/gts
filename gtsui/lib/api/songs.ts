@@ -3,7 +3,7 @@ import {
   SongListItemDto,
   SongResponseDto,
   SongUpdateDto,
-} from "@/types/song";
+} from "@/dtos/song";
 import { apiClient } from "./client";
 
 export const songApi = {

@@ -1,34 +1,35 @@
-import { NextRequest, NextResponse } from "next/server";
+import { AlbumResponseDto, AlbumUpdateDto } from "@/dtos/album";
 import springApi from "@/lib/services/springApi";
-import type { SongResponseDto, SongUpdateDto } from "@/dtos/song";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
-    const response = await springApi.get<SongResponseDto>(
-      `/songs/${params.id}`,
+    const response = await springApi.get<AlbumResponseDto>(
+      `/albums/${params.id}`,
     );
     return NextResponse.json(response.data);
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Failed to fetch song" },
+      { error: error.message || "Failed to fetch album" },
       { status: error.response?.status || 500 },
     );
   }
 }
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
-    const body: SongUpdateDto = await request.json();
-    const response = await springApi.put(`/songs/update/${params.id}`, body);
+    const body: AlbumUpdateDto = await request.json();
+    const response = await springApi.put(`/albums/update/${params.id}`, body);
     return NextResponse.json(response.data);
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Failed to update song" },
+      { error: error.message || "Failed to update album" },
       { status: error.response?.status || 500 },
     );
   }
@@ -39,11 +40,11 @@ export async function DELETE(
   { params }: { params: { id: string } },
 ) {
   try {
-    await springApi.delete(`/songs/delete/${params.id}`);
+    await springApi.delete(`/albums/delete/${params.id}`);
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Failed to delete song" },
+      { error: error.message || "Failed to delete album" },
       { status: error.response?.status || 500 },
     );
   }
