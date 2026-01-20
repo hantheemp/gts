@@ -1,25 +1,21 @@
-import { api } from "../axios";
-import type {
+import {
   SongCreateDto,
-  SongUpdateDto,
-  SongResponseDto,
   SongListItemDto,
+  SongResponseDto,
+  SongUpdateDto,
 } from "@/types/song";
+import { apiClient } from "./client";
 
 export const songApi = {
-  list: async (): Promise<SongListItemDto[]> => {
-    return api.get<SongListItemDto[]>("/songs");
-  },
-  get: async (id: number): Promise<SongResponseDto> => {
-    return api.get<SongResponseDto>(`/songs/${id}`);
-  },
-  insert: async (dto: SongCreateDto): Promise<SongResponseDto> => {
-    return api.post<SongResponseDto>("/insert", dto);
-  },
-  update: async (id: number, dto: SongUpdateDto): Promise<SongResponseDto> => {
-    return api.put<SongResponseDto>(`/songs/update/${id}`, dto);
-  },
-  delete: async (id: number): Promise<void> => {
-    return api.delete<void>(`/songs/delete/${id}`);
-  },
+  list: () => apiClient.get<SongListItemDto[]>("/songs"),
+
+  get: (id: number) => apiClient.get<SongResponseDto>(`/songs/${id}`),
+
+  create: (dto: SongCreateDto) =>
+    apiClient.post<SongResponseDto>("/songs", dto),
+
+  update: (id: number, dto: SongUpdateDto) =>
+    apiClient.put<SongResponseDto>(`/songs/${id}`, dto),
+
+  delete: (id: number) => apiClient.delete(`/songs/${id}`),
 };
