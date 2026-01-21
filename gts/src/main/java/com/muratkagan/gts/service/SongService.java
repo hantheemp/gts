@@ -1,12 +1,17 @@
 package com.muratkagan.gts.service;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.muratkagan.gts.audit.kafka.AuditEvent;
+import com.muratkagan.gts.audit.producer.AuditEventProducer;
 import com.muratkagan.gts.dao.*;
 import com.muratkagan.gts.entities.*;
+
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +32,18 @@ public class SongService implements ISongService {
 	private final GenreDao genreDao;
 	private final InstrumentationDao instrumentationDao;
 	private final MoodDao moodDao;
+	private final AuditEventProducer auditEventProducer;
 	private final SongMapper songMapper;
 
 	@Autowired
 	public SongService(SongDao songDao, ArtistDao artistDao, GenreDao genreDao, InstrumentationDao instrumentationDao,
-			MoodDao moodDao,
-			SongMapper songMapper) {
+			MoodDao moodDao, AuditEventProducer auditEventProducer, SongMapper songMapper) {
 		this.songDao = songDao;
 		this.artistDao = artistDao;
 		this.genreDao = genreDao;
 		this.instrumentationDao = instrumentationDao;
 		this.moodDao = moodDao;
+		this.auditEventProducer = auditEventProducer;
 		this.songMapper = songMapper;
 	}
 
@@ -76,7 +82,7 @@ public class SongService implements ISongService {
 			}
 			song.setGenres(new HashSet<>(genres));
 		}
-		
+
 		if (dto.getInstrumentationIds() != null && !dto.getInstrumentationIds().isEmpty()) {
 			List<Instrumentation> instrumentations = instrumentationDao.getByIds(dto.getInstrumentationIds());
 			if (instrumentations.size() != dto.getInstrumentationIds().size()) {
@@ -85,15 +91,21 @@ public class SongService implements ISongService {
 			song.setInstrumentations(new HashSet<>(instrumentations));
 		}
 
-		if (dto.getMoodIds() != null && !dto.getMoodIds().isEmpty()){
+		if (dto.getMoodIds() != null && !dto.getMoodIds().isEmpty()) {
 			List<Mood> moods = moodDao.getByIds(dto.getMoodIds());
-			if (moods.size() != dto.getMoodIds().size()){
+			if (moods.size() != dto.getMoodIds().size()) {
 				throw new IllegalArgumentException("One or more moods not found");
 			}
 			song.setMoods(new HashSet<>(moods));
 		}
 
 		Song persisted = songDao.insert(song);
+
+		AuditEvent event = new AuditEvent(1, persisted.getId(), "SONG_CREATED", "SONG",
+				"{\"title\":\"" + persisted.getTitle() + "\"}", Instant.now(), MDC.get("traceId"));
+
+		auditEventProducer.publish(event);
+
 		return songMapper.toResponse(persisted);
 	}
 
@@ -123,9 +135,9 @@ public class SongService implements ISongService {
 			existing.setInstrumentations(new HashSet<>(instrumentations));
 		}
 
-		if (dto.getMoodIds() != null && !dto.getMoodIds().isEmpty()){
+		if (dto.getMoodIds() != null && !dto.getMoodIds().isEmpty()) {
 			List<Mood> moods = moodDao.getByIds(dto.getMoodIds());
-			if (moods.size() != dto.getMoodIds().size()){
+			if (moods.size() != dto.getMoodIds().size()) {
 				throw new IllegalArgumentException("One or more moods not found");
 			}
 			existing.setMoods(new HashSet<>(moods));
