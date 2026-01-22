@@ -1,56 +1,29 @@
-package com.muratkagan.gts.audit.entity;
+package com.muratkagan.gts.audit.dto;
 
 import java.time.Instant;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import java.time.OffsetDateTime;
 
-import com.muratkagan.gts.audit.kafka.AuditEvent;
+public class AuditEventLogResponseDto {
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "audit_events")
-public class AuditEventLog {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(nullable = false)
 	private Integer actorId;
 
-	@Column(nullable = false)
 	private Integer targetId;
 
-	@Column(nullable = false)
 	private String eventType;
 
-	@Column(nullable = false)
 	private String targetType;
 
-	@JdbcTypeCode(SqlTypes.JSON)
 	private String metadata;
 
-	@Column(nullable = false)
 	private Instant occurredAt;
 
 	private String traceId;
 
-	public AuditEventLog(Integer actorId, Integer targetId, String eventType, String targetType, String metadata,
-			Instant occurredAt, String traceId) {
-		this.actorId = actorId;
-		this.targetId = targetId;
-		this.eventType = eventType;
-		this.targetType = targetType;
-		this.metadata = metadata;
-		this.occurredAt = occurredAt;
-		this.traceId = traceId;
-	}
+	private OffsetDateTime createdAt;
 
-	public static AuditEventLog fromKafka(AuditEvent event) {
-		return new AuditEventLog(event.getActorId(), event.getTargetId(), event.getEventType(), event.getTargetType(),
-				event.getMetadata(), event.getOccurredAt(), event.getTraceId());
-	}
+	// Getters and setters
 
 	public Integer getId() {
 		return id;
@@ -115,4 +88,13 @@ public class AuditEventLog {
 	public void setTraceId(String traceId) {
 		this.traceId = traceId;
 	}
+
+	public OffsetDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(OffsetDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
 }

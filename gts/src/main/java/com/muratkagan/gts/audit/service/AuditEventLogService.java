@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.muratkagan.gts.audit.dao.AuditEventLogDao;
+import com.muratkagan.gts.audit.dto.AuditEventLogCreateDto;
+import com.muratkagan.gts.audit.dto.AuditEventLogListItemDto;
+import com.muratkagan.gts.audit.dto.AuditEventLogResponseDto;
 import com.muratkagan.gts.audit.entity.AuditEventLog;
+import com.muratkagan.gts.audit.mapper.AuditEventLogMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -17,28 +21,29 @@ import jakarta.transaction.Transactional;
 public class AuditEventLogService implements IAuditEventLogService {
 
 	private final AuditEventLogDao auditEventLogDao;
+	private final AuditEventLogMapper mapper;
 
 	@Autowired
-	public AuditEventLogService(AuditEventLogDao auditEventLogDao) {
+	public AuditEventLogService(AuditEventLogDao auditEventLogDao, AuditEventLogMapper mapper) {
 		this.auditEventLogDao = auditEventLogDao;
+		this.mapper = mapper;
 	}
 
 	@Override
-	public List<AuditEventLog> getAll() {
-		return auditEventLogDao.getAll().stream().collect(Collectors.toList());
+	public List<AuditEventLogListItemDto> getAll() {
+		return auditEventLogDao.getAll().stream().map(mapper::toListItem).collect(Collectors.toList());
 	}
 
 	@Override
-	public Optional<AuditEventLog> getById(Integer id) {
-		return auditEventLogDao.getById(id);
+	public Optional<AuditEventLogResponseDto> getById(Integer id) {
+		return auditEventLogDao.getById(id).map(mapper::toResponse);
 	}
 
 	@Override
-	public AuditEventLog insert(AuditEventLog auditEventLog) {
-
-		AuditEventLog persisted = auditEventLogDao.insert(auditEventLog);
-		return persisted;
-
+	public AuditEventLogResponseDto insert(AuditEventLogCreateDto dto) {
+		AuditEventLog auditEventLog = mapper.toEntity(dto);
+		auditEventLogDao.insert(auditEventLog);
+		return mapper.toResponse(auditEventLog);
 	}
 
 }

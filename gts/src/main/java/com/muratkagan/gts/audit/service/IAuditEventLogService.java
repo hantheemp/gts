@@ -3,14 +3,16 @@ package com.muratkagan.gts.audit.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.muratkagan.gts.audit.entity.AuditEventLog;
+import com.muratkagan.gts.audit.dto.AuditEventLogCreateDto;
+import com.muratkagan.gts.audit.dto.AuditEventLogListItemDto;
+import com.muratkagan.gts.audit.dto.AuditEventLogResponseDto;
 
 public interface IAuditEventLogService {
 
-	List<AuditEventLog> getAll();
+	List<AuditEventLogListItemDto> getAll();
 
-	Optional<AuditEventLog> getById(Integer id);
+	Optional<AuditEventLogResponseDto> getById(Integer id);
 
-	AuditEventLog insert(AuditEventLog auditEventLog);
+	AuditEventLogResponseDto insert(AuditEventLogCreateDto dto);
 
 }
